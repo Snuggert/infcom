@@ -1,0 +1,32 @@
+\documentclass[pdftex,12pt,a4paper]{article}
+
+\usepackage{wrapfig, amssymb, amsmath, graphicx, subfigure, pifont, seqsplit}
+\usepackage[dutch]{babel}
+\usepackage[top=0.5in, bottom=0.5in, left=1in, right=1in]{geometry}
+\pagenumbering{arabic}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\begin{document}
+\input{title.tex}
+
+\begin{enumerate}
+    \item Let $X$ be a discrete random variable.  Show that the entropy of a
+        function $g$ of $X$ is less than or equal to the entropy of $X$ by
+        justifying the following steps:
+    \begin{align}
+        \mathbb{H}[g(X)|X] &= \mathbb{E}\left[\sum_n^i X_i\right]\\
+                      \intertext{Expected value is the expected value of the sum of the independent \textit{Bernoulli distributions}.}
+                      &= \sum_n^i\mathbb{E}[X_i]\\
+                      &= \sum_n^i p\\
+                      &= np
+    \end{align}
+
+    \item Let $X$ and $Y$ be independent binary random variables with:
+        $$\mathbb{P}_X[1] = \mathbb{P}_X[0] = \mathbb{P}_Y[1] = \mathbb{P}_Y[0] = \frac{1}{2}$$
+        \begin{align}
+            $H(X+Y)$
+        \end{align}
+
+\end{enumerate}
+
+\end{document}

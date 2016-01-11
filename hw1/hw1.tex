@@ -1,0 +1,170 @@
+\documentclass[pdftex,12pt,a4paper]{article}
+
+\usepackage{wrapfig, amssymb, amsmath, graphicx, subfigure, pifont, seqsplit}
+\usepackage[dutch]{babel}
+\usepackage[top=0.5in, bottom=0.5in, left=1in, right=1in]{geometry}
+\pagenumbering{arabic}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\begin{document}
+\input{title.tex}
+
+\begin{enumerate}
+    \item
+        \ding{51}
+    \item
+        \begin{enumerate}
+            \item
+                Have 52 choices..draw a card..have 51 choices..draw a card....have 1 choice.\\
+
+                $ 52! = 
+                    \seqsplit{%
+                    80658175170943878571660636856403766975289505440883277824000000000000}\\ = 8.0658175170943878571660636856403766975289505440883277824... × 10^{67}$
+            \item
+                Have 52 choices out of 104 cards..draw a card..have 52 choices out of a 103 cards..draw a card..have either 51 choices out of a 102 cards or 52 choices out of a 102 cards..draw a card....have 1 choice.\\
+
+                $104! / 2^{52}\\ = \seqsplit{%
+                2286841104292142739817480260270397947731385025482502766874913064240686762501672463119886085466145431873911265472729321167650816000000000000000000000000}\\ = 2.2868411042921427398174802602703979477313850254825027668... × 10^{150}$
+        \end{enumerate}
+    \item
+        Prove  the  following  inequality  for  real  numbers $p_1,p_2,\dots,p_n \in [0,1]$\\
+        (i.e. $0 \leq p_i \leq 1$ $i = 1,2\dots,n$):\\
+        (*) $$(1-p_1)(1-p_2)\dots(1-p_n) \geq 1 - p_1 - p_2 - \dots - p_n$$
+        \textbf{Left side}
+            \begin{align}
+                (1-p_1)(1-p_2)\dots(1-p_n) &=(1-\mathbb{P}(E_1))(1-\mathbb{P}(E_2))\dots(1-\mathbb{P}(E_n))\\
+                &=(\mathbb{P}(\overline{E_1}))(\mathbb{P}(\overline{E_2}))\dots(\mathbb{P}(\overline{E_n}))\\
+                &=\prod_i^n\mathbb{P}(\overline{E_i})\\
+                \intertext{Multiplication of independent events is same as the intersection of these independent events.}
+                &=\mathbb{P}\left(\bigcap_i^n(\overline{E_i})\right)
+            \end{align}
+        \textbf{Right side}
+            \begin{align}
+                1 - p_1 - p_2 - \dots - p_n &= 1-\sum_i^np_i\\
+                                            &=1-\sum_i^n\mathbb{P}(E_i)\\
+                                            &=1-\sum_i^n(1 - \mathbb{P}(\overline{E_i}))\\
+                                            &=1-n-\sum_i^n(\mathbb{P}(\overline{E_i}))
+            \end{align}
+        \newpage
+        \textbf{Combined}
+            \begin{align}
+                \mathbb{P}\left(\bigcap_i^n(\overline{E_i})\right) &\geq 1-n-\sum_i^n(\mathbb{P}(\overline{E_i}))\\
+                n &\geq 1 - \sum_i^n(\mathbb{P}(\overline{E_i})) - \mathbb{P}\left(\bigcap_i^n(\overline{E_i})\right)\\
+                n &\geq 1 - \mathbb{P}\left(\bigcup_i^n(\overline{E_i})\right)
+            \end{align}
+        (*new)
+            $$\mathbb{P}\left(\bigcup_i^n(\overline{E_i})\right) + n\geq 1$$
+        (n=1)
+            $$\mathbb{P}(\overline{E_1}) + 1 \geq 0$$
+            $$\mathbb{P}(\forall \chi) \in [0,1]$$
+            $$\textit{so \ding{51}}$$
+        (n)
+            $$\mathbb{P}\left(\bigcup_i^n(\overline{E_i})\right) + n\geq 1 $$
+            $$\textit{Since}$$
+            $$\mathbb{P}(\forall \chi) \in [0,1]$$
+            $$n \in {N}$$
+            $$ \textit{so \ding{51}}$$
+        (*new) holds and so does (*)
+    \item
+        \begin{enumerate}
+            \item
+                \begin{align}
+                    \operatorname{Var}(X) &= \mathbb{E}[(X - \mu)^2] \\
+                                          &= \mathbb{E}[(X - \mathbb{E}[X])^2] \\
+                                          &= \mathbb{E}[X^2 - 2X\mathbb{E}[X] + (\mathbb{E}[X])^2] \\
+                                          &= \mathbb{E}[X^2] - 2\mathbb{E}[X]\mathbb{E}[X] + (\mathbb{E}[X])^2 \\
+                                          &= \mathbb{E}[X^2 ] - (\mathbb{E}[X])^2
+                \end{align}
+            \item
+                \begin{align}
+                    \operatorname{Var}(aX) &= \operatorname{Var}(Y)\\
+                                           &= \mathbb{E}[Y^2] - (\mathbb{E}[Y])^2\\
+                                           &= \mathbb{E}[aX^2] - (\mathbb{E}[aX])^2\\
+                                           &= a^2\mathbb{E}[X^2] - (a\mathbb{E}[X])^2\\
+                                           &= a^2\mathbb{E}[X^2] - a^2(\mathbb{E}[X])^2\\
+                                           &= a^2(\mathbb{E}[X^2] - (\mathbb{E}[X])^2)\\
+                                           &= a^2\operatorname{Var}(aX)
+                \end{align}
+                \begin{align}
+                    \operatorname{Var}(X + a) &= \operatorname{Var}(Y)\\
+                                              &= \mathbb{E}[Y^2] - (\mathbb{E}[Y])^2\\
+                                              &= \mathbb{E}[(X+a)^2] - (\mathbb{E}[(X+a)])^2\\
+                                              &= \mathbb{E}[X^2 + a^2 + 2aX] - (\mathbb{E}[X] + a)^2\\
+                                              &= \mathbb{E}[X^2]+ a^2 + 2a\mathbb{E}=[X] - (\mathbb{E}[X]^2 + a^2 + 2a\mathbb{E}[X])\\
+                                              &= \mathbb{E}[X^2]+ a^2 + 2a\mathbb{E}=[X] - (\mathbb{E}[X])^2 - a^2 - 2a\mathbb{E}[X]\\
+                                              &= \mathbb{E}[X^2] - (\mathbb{E}[X])^2
+                \end{align}
+            \item
+                \begin{align}
+                    \operatorname{Var}(X + Y) &= \operatorname{Var}(Z)\\
+                                              &= \mathbb{E}[Z^2] - (\mathbb{E}[Z])^2\\
+                                              &= \mathbb{E}[(X+Y)^2] - (\mathbb{E}[(X+Y)])^2\\
+                                              &= \mathbb{E}[X^2+Y^2+2XY] - (\mathbb{E}[X]+\mathbb{E}[Y])^2\\
+                                              &= \mathbb{E}[X^2]+\mathbb{E}[Y^2]+2\mathbb{E}[XY] - (\mathbb{E}[X]^2+\mathbb{E}[Y]^2+2\mathbb{E}[X]\mathbb{E}[Y])\\
+                                              &= \operatorname{Var}(X) + \operatorname{Var}(Y) + 2(\mathbb{E}(XY)-\mathbb{E}(X)\mathbb{E}(Y))\\
+                                              &= \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X,Y)\\
+                                              \intertext{Covariance of two independent variables is 0}
+                                              &= \operatorname{Var}(X) + \operatorname{Var}(Y)
+                \end{align}
+            \item Let $X$ be a random variable with \textit{Bernoulli distribution}
+                \begin{align}
+                    \mathbb{E}[X] &= \sum_{x\in X}x\mathbb{P}_x(x)\\
+                                  &= 1*\mathbb{P}_x(1) + 0*\mathbb{P}_x(0)\\
+                                  &= 1*p + 0*(1-p)\\
+                                  &= p
+                \end{align}
+                \begin{align}
+                    \operatorname{Var}[X] &= \mathbb{E}[X^2 ] - (\mathbb{E}[X])^2\\
+                                          &= \left(\sum_{x\in X}x^2P_x(x)\right) - p^2\\
+                                          &= 1^2*\mathbb{P}_x(1) + 0^2*\mathbb{P}_x(0) - p^2\\
+                                          &= 1*p + 0*(1-p) - p^2\\
+                                          &= p - p^2\\
+                                          &= p(1-p)
+                \end{align}
+            \newpage
+            \item Let $Y$ be a random variable with \textit{binomial distribution} $P_Y(y) = \tbinom ny p^y(1-p)^{n-y}$
+                \begin{align}
+                    \mathbb{E}[Y] &= \mathbb{E}\left[\sum_n^i X_i\right]\\
+                                  \intertext{Expected value is the expected value of the sum of the independent \textit{Bernoulli distributions}.}
+                                  &= \sum_n^i\mathbb{E}[X_i]\\
+                                  &= \sum_n^i p\\
+                                  &= np
+                \end{align}
+                \begin{align}
+                    \operatorname{Var}[Y] &= \operatorname{Var}\left[\sum_n^i X_i\right]\\
+                                          &= \sum_n^i\operatorname{Var}[X_i]\\
+                                          &= \sum_n^i p(1-p)\\
+                                          &= n p(1-p)
+                \end{align}
+        \end{enumerate}
+    \item
+        An urn contains $K$ balls, of which $B$ are black and $W = K - B$ balls are replaced when drawn.\\
+        Classic \textit{Bernoulli distribution}
+        \begin{enumerate}
+            \item 
+                $f(n_b; N, B/K) = f(k; n, p) = \tbinom nk p^k(1-p)^{n-k}$
+            \item
+                A Bernoulli distribution has $\mathbb{E}[X] = np$, this one has $n = N$ and $p = B/K$\\
+                so the expected value $= N * (B/K)$\\
+                N=5 and N=400 for B=2 and K=10
+                \begin{enumerate}
+                    \item
+                        $5*(2/10) = 1$\\
+                    \item
+                        $400*(2/10) = 80$\\
+                \end{enumerate}
+
+                A Bernoulli distribution has $\operatorname{Var}[X] = np(1-p)$\\
+                so the variance $= N * (B/K)(1 - (B/K))$\\
+                N=5 and N=400 for B=2 and K=10
+                \begin{enumerate}
+                    \item
+                        $5*0.2(1-0.2) = 0.8$\\
+                    \item
+                        $400*0.2(1-0.2) = 64$\\
+                \end{enumerate}
+        \end{enumerate}
+
+\end{enumerate}
+
+\end{document}
