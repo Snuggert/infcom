@@ -1,0 +1,71 @@
+\documentclass[pdftex,12pt,a4paper]{article}
+
+\usepackage{wrapfig, amssymb, amsmath, graphicx, subfigure, pifont, seqsplit, float, booktabs, siunitx, adjustbox}
+\usepackage[english]{babel}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\pagenumbering{arabic}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\usepackage{forest}
+\tikzset{el style/.style={midway, font=\scriptsize, inner sep=+1pt, auto=right}}
+\forestset{angled/.style={
+    content/.expanded={\noexpand\textless\forestov{content}\noexpand\textgreater}}}
+
+\begin{document}
+\input{title.tex}
+
+\begin{enumerate}
+    \item
+        \begin{enumerate}
+            \item $H(f(Y)) ? H(Y)$\\
+                \begin{align}
+                    H(Y) &= H(Y) + H[f(Y)|Y]\\
+                         &= H(Y,f(Y))\\
+                         &= H(f(Y)) + H(Y|f(Y))\\
+                         &\ge H(f(Y))\\
+                 H(f(Y)) &\le H(Y)
+                \end{align}
+            \item $H(X|f(Y)) ? H(X|Y)$
+                \begin{align}
+                    H(X|f(Y)) &? H(X|Y)\\
+                    H(X,f(Y)) - H(f(Y)) &? H(X,Y) - H(Y)\\
+                    H(f(Y)|X) + H(X) - H(f(Y)) &? H(Y|X) + H(X) - H(Y)\\
+                    H(f(Y)|X) - H(f(Y)) &? H(Y|X) - H(Y)\\
+                              &? H(Y,f(Y))\\
+                              &? H(f(Y)) + H(Y|f(Y))\\
+                              &\ge H(f(Y))\\
+                 H(X|f(Y)) &\le H(X|Y)
+                \end{align}
+                NEEEDS WORK
+            \item $I(X,Z|Y) = 0 \implies I(X;Z) ? I(X;Y)\mathrm{ \& }I(X;Z) ? I(Y;Z)$
+                \begin{align}
+                    I(X;Z|Y) &= I(X;Y,Z) - I(X;Y) = 0\\
+                             &= I(X;Y|Z) + I(X;Z) - I(X;Y) = 0\\
+                             &= I(X;Y|Z) + I(X;Z) = I(X;Y) \implies I(X;Z) \le I(X;Y)
+                \end{align}
+                \begin{align}
+                    I(X;Z|Y) &= I(X;Y,Z) - I(X;Y) = 0\\
+                             &= I(X;Y|Z) + I(X;Z) - I(X;Y) = 0\\
+                             &= I(X;Z) = I(X;Y) - I(X;Y|Z)\\
+                             \intertext{Chain rule for mutual information}
+                             &= I(X;Z) = I(X;Y) - (I(X;Y) + H(Z|X) + H(Z|Y) - H(Z|X,Y) - H(Z))\\
+                             &= I(X;Z) = - H(Z|X) - H(Z|Y) + H(Z|X,Y) + H(Z)\\
+                             \intertext{$I(X;Y)= H(X,Y) - H(X|Y) - H(Y|X)$}
+                             &= I(X;Z) + H(Z,Y) - H(Y|Z) = I(Z;Y) - H(Z|X) + H(Z|X,Y) + H(Z)\\
+                             &= I(X;Z) + H(Z,Y) - H(Y|Z) + H(Z|X) - H(Z|X,Y) + H(Z) = I(Z;Y)\\
+                             &= I(X;Z) + H(Z,Y) - (H(Y|Z) - H(Z)) + H(Z|X) - H(Z|X,Y) = I(Z;Y)\\
+                             &= I(X;Z) + H(Z,Y) - H(Z,Y) + H(Z|X) - H(Z|X,Y) = I(Z;Y)\\
+                             &= I(X;Z) + H(Z|X) - H(Z|X,Y) = I(Z;Y)\\
+                             &= I(X;Z) - (-H(Z|X) + H(Z|X,Y)) = I(Z;Y)\\
+                             &= I(X;Z) - (H(Z|X,Y) - H(Z|X)) = I(Z;Y)\\
+                             &= I(X;Z) - H(Y|Z|X) = I(Z;Y)\\
+                             &= I(X;Z) = I(Z;Y) + H(Y|Z|X)\\
+                             &= I(X;Z) = I(Z;Y) + H(Y|Z|X) \implies I(X;Z) \ge I(Z;Y)
+                \end{align}
+                Too long but correct.
+        \end{enumerate}
+    \item 
+    \item
+\end{enumerate}
+
+\end{document}
