@@ -26,17 +26,16 @@
                  H(f(Y)) &\le H(Y)
                 \end{align}
             \item $H(X|f(Y)) ? H(X|Y)$
-                \begin{align}
-                    H(X|f(Y)) &? H(X|Y)\\
-                    H(X,f(Y)) - H(f(Y)) &? H(X,Y) - H(Y)\\
-                    H(f(Y)|X) + H(X) - H(f(Y)) &? H(Y|X) + H(X) - H(Y)\\
-                    H(f(Y)|X) - H(f(Y)) &? H(Y|X) - H(Y)\\
-                              &? H(Y,f(Y))\\
-                              &? H(f(Y)) + H(Y|f(Y))\\
-                              &\ge H(f(Y))\\
-                 H(X|f(Y)) &\le H(X|Y)
-                \end{align}
-                NEEEDS WORK
+                The entropy of $f(Y)$ only decreases or is equal to the
+                entropy of $Y$
+                \begin{figure}[h]
+                \centering
+                \includegraphics[width=0.5\linewidth]{venn.png}
+                \end{figure}
+
+                If H(f(Y)) is smaller than H(Y) this means:\\
+                $H(X|Y) \ge H(X|f(Y))$\\
+                $H(X|f(Y)) \le H(X|Y)$
             \item $I(X,Z|Y) = 0 \implies I(X;Z) ? I(X;Y)\mathrm{ \& }I(X;Z) ? I(Y;Z)$
                 \begin{align}
                     I(X;Z|Y) &= I(X;Y,Z) - I(X;Y) = 0\\
@@ -64,8 +63,55 @@
                 \end{align}
                 Too long but correct.
         \end{enumerate}
-    \item 
-    \item
+    \item For each statement below, specify a (different) joint distribution
+        $P_{XYZ}$ of random variables $X$, $Y$ and $Z$ such that the
+        inequalities hold.
+        \begin{enumerate}
+            \item There exists a $y$, such that $H(X|Y = y) > H(X)$\\
+                Let (X,Y) take values on $(0,0), (0,1) (1,0)$ with equal
+                probability $(p=1/3)$.\\
+                Then $H(X)=h(1/3)\approx0.92 < 1$.\\
+                But $H(X|Y=0)=h(1/2)=1$\\
+            \item $I(X;Y) > I(X;Y|Z)$
+                Let Z make X and Y independant.
+                Let (X,Y) take values on $(0,0), (0,1) (1,0)$ with equal
+                probability $(p=1/3)$.\\
+                But (X,Y|Z) take on values $ (0,1) (1,0)$ with equal
+                probability $(p=1/2)$.\\
+                Then $I(X;Y|Z) = 0$ and $I(X;Y) \approx 0.6$
+            \item $I(X;Y) < I(X;Y|Z)$
+                Let Z make X and Y dependant.
+                Let (X,Y) take values on $(0,1) (1,0)$ with equal
+                probability $(p=1/2)$.\\
+                But (X,Y|Z) take on values $ (0,1) (1,0) (1,0)$ with equal
+                probability $(p=1/3)$.\\
+                Then $I(X;Y|Z) \approx 0.6$ and $I(X;Y) = 0$
+        \end{enumerate}
+    \item \textbf{Bottleneck:} Suppose a Markov chain starts in one of n
+        states, necks down to $k < n$ states, and then fans back to $m > k$
+        states. Thus $X_1\to X_2\to X_3$.
+        \begin{enumerate}
+            \item Show that the (unconditional) dependence of $X_1$ and $X_3$
+                is limited by the bottleneck by proving that $I(X_1;X_3) \leq \log k$.
+            \item  Evaluate $I(X_1;X_3)$ for $k = 1$, and explain why no
+                dependence can survive such a bottleneck. 
+        \end{enumerate}
+    \clearpage
+    \item Which of the three relations $\le, \ge, =$ holds between the quantities
+        H(A) and H(C)? Prove your answer.
+        \begin{align}
+            I(A;C|B) &= I(A;B|C)\\
+            I(A;C,B) - I(A;B) &= I(A;C,B) - I(A;C)\\
+            I(A;B) &= I(A;C)\\
+            I(A;B) &= I(A;C) = 0\\
+        \end{align}
+        Both B and C are independent of A, so H(A) != H(C)
+        H(Y|X)=0  if and only if the value of Y is completely determined by the
+        value of X
+        \begin{align}
+            H(A|B,C) &= 0\\
+        \end{align}
+        A can only be fully decided by B,C if $B\le A$
 \end{enumerate}
 
 \end{document}
