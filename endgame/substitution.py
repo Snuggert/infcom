@@ -17,17 +17,21 @@ def main():
         cipher_frequency[c] = (cipher_dict[c] / float(len(cipher))) * 100
 
     print("Number of different chars: ", len(cipher_dict))
-    print("Frequencies of chars in Cipher: ",
-          sorted(cipher_frequency.items(), key=lambda x: x[1], reverse=True))
+    print("Frequencies of chars in Cipher: ")
+
+    for line in sorted(cipher_frequency.items(), key=lambda x: x[1],
+                       reverse=True):
+        print(line[0], line[1])
     print()
 
-    uncipher = '_' * len(cipher)
-    # uncipher = cipher
+    # uncipher = '_' * len(cipher)
+    uncipher = cipher
 
     # Space is most occuring in the englsih language so p->' '
     uncipher = replace(cipher, uncipher, 'p', ' ')
     # Then comes e so r->e
     uncipher = replace(cipher, uncipher, 'r', 'e')
+
     # I see a lot of 19e, so 19 is probably th, the is most occuring Trigram.
     uncipher = replace(cipher, uncipher, '1', 't')
     uncipher = replace(cipher, uncipher, '9', 'h')

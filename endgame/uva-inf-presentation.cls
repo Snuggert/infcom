@@ -14,9 +14,12 @@
 
 \RequirePackage{translations}
 \RequirePackage{lipsum}
+
 \RequirePackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{fix-cm}
+
 \RequirePackage{booktabs}
-\RequirePackage[dutch]{babel}
 \RequirePackage{graphicx}
 \RequirePackage{tikz}
 
@@ -31,8 +34,8 @@
 %	VERTALINGEN
 %-------------------------------------------------------------------------------
 
-\deftranslation[to=Dutch]{Theorem}{Stelling}
-\deftranslation[to=Dutch]{Example}{Voorbeeld}
+%\deftranslation[to=Dutch]{Theorem}{Stelling}
+%\deftranslation[to=Dutch]{Example}{Voorbeeld}
 
 %-------------------------------------------------------------------------------
 %	STIJL
