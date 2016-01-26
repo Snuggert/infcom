@@ -477,7 +477,6 @@ gklnprtuz\&xysomqihfdbace\\
 \begin{minipage}{0.45\linewidth}
 \includegraphics[width=\linewidth]{Alberti_cipher_disk.JPG}
 \end{minipage}
-
 \end{frame}
 
 \begin{frame}
@@ -501,17 +500,48 @@ Giovan Bellaso $\sim 1553$
 
 \begin{frame}
 \frametitle{Poly-Alphabetic Cipher:\\ VIGENÈRE CIPHER}
+\begin{minipage}{0.55\linewidth}
+
+\textbf{Plaintext:}\\
+\hspace{4ex}THEWARSTARTS...
+
+\textbf{KEY=BANANA:}\\
+\hspace{4ex}BANANABANANA...
+
+\textbf{Ciphertext:}\\
+\hspace{4ex}UHRWNRTTNRGS... 
+
+\end{minipage}%
+\begin{minipage}{0.45\linewidth}
+\centering
+\includegraphics[width=0.95\linewidth]{Vigenere_square_shading} %TABULA RECTA
+\end{minipage}
 \end{frame}
 
 \subsection{Periodic Polyalphabetic Cipher}
 \frame{\tableofcontents[currentsubsection]}
 
 \begin{frame}
-\frametitle{Periodic Polyalphabetic Cipher:\\ Example}
+\frametitle{Periodic Polyalphabetic Cipher:}
+\textbf{Properties:}\\
+\hspace{4ex}The frequency distribution is completely flat\\
+
+\textbf{Decoding:}\\
+\hspace{4ex}Search for repeating patterns in the ciphertext\\
+\hspace{4ex}Get the distance between these patterns, and calculate\\
+\hspace{4ex}the greatest common divisor.
 \end{frame}
 
 \begin{frame}
 \frametitle{Periodic Polyalphabetic Cipher:\\ Problem}
+\vspace{-30pt}
+\lstinputlisting[
+    backgroundcolor=\color{lightgray},
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{3.2pt}{3.7pt}\selectfont},
+    caption=Periodic Poly-Alphabetic Cipher(like Enigma) provided by Mathias,
+]{ciphers/polyalphabetic_cipher.txt}
 \end{frame}
 
 \begin{frame}

@@ -52,5 +52,5 @@
 \addtobeamertemplate{frametitle}{}{%
 \begin{tikzpicture}[remember picture,overlay]
 \node[anchor=north east,yshift=-2.5pt] at (current page.north east)
-  {\includegraphics[width=6.6cm]{logoUvA_nl}};
+  {\includegraphics[width=5.5cm]{logoUvA_nl}};
 \end{tikzpicture}}
