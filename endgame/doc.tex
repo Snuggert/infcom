@@ -1,0 +1,688 @@
+\documentclass{uva-inf-bachelor-thesis}
+\usepackage[british]{babel}
+\usepackage[titletoc,toc,page]{appendix}
+
+\usepackage{graphicx}
+\usepackage{etoolbox}
+\usepackage{fancyvrb}
+\usepackage{amsmath}
+\usepackage{siunitx}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+\usepackage{float}
+
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\hypersetup{pageanchor=false}
+
+\usepackage{listings}
+\usepackage{caption}
+\DeclareCaptionFormat{lstcaptionformat}{\hrulefill\\#1#2#3}
+\captionsetup[lstinputlisting]{position=bottom, format=lstcaptionformat}
+
+\usepackage[utf8]{inputenc}
+\usepackage{fontenc}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\thepage}
+\usepackage[Sonny]{fncychap}
+\setlength{\oddsidemargin}{.5cm}
+\setlength{\evensidemargin}{.5cm}
+\setlength{\headheight}{15pt}
+
+\title{{\small Information and Communication}\\\textbf{Codebreaking for Traditional Cipher Systems}}
+\author{Abe Wiersma\\{\small10433120}}
+% Title Page
+\supervisors{Christian Schaffner}
+\signedby{}
+\bibliographystyle{unsrt}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In a time where Traditional Cipher systems have little to no value in keeping
+your secrets safe from others, what is their value in comparison to modern
+cryptography? This paper describes the breaking of several traditional ciphers,
+with the choices and tools used to get a decoded plaintext.
+\end{abstract}
+
+\tableofcontents
+%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%
+The first cipher in recorded history was found in a tomb in
+Egypt\cite{kahn1996codebreakers} around 2000 B.C.
+A master scribe, in a town called Menet Khufu,
+sketched for the first time a hieroglyphic cipher using simple symbol
+substitutions. It might not have been to make the text unreadable, but to convey
+a sense of dignity and authority. The cipher text though is the first example of
+deliberate transformation of a piece of text. In the centuries that follow as the
+Egyptian civilization thrived, these transformations became more and more
+complicated.\\
+
+In other civilizations cryptology also arose independently, but mostly died
+with the collapses of these civilizations. Sometimes cryptology would survive
+embedded in literature but more was lost than retained.\\
+
+After being used decoratively, ciphers started getting used to transport
+secrets like war movements or government secrets. Only when the renaissance
+started in the western world, the knowledge of
+cryptology began taking leaps forward and cryptology was developed further
+than `simple' substitution ciphers.
+Ciphers proclaimed to be unbreakable that were developed during this period
+failed to hold up long after computers where developed. The breaking of Enigma
+(a poly-alphabetic cipher) by the English during the second World War is a good
+example of this.\\
+
+How hard is it for me, a computer science student with little
+beforehand cryptography experience, to break a few ciphers that have made for
+the course Information Theory at the Institute for Logic, Language and
+Computation in Amsterdam?
+When explaining how the cipher was broken is finished, traditional and modern
+cryptography will be related to each other.
+
+\chapter{Breaking Traditional Ciphers}
+Where the early Egyptian ciphers could be broken just by looking at them a bit
+longer\cite{kahn1996codebreakers}, later ciphers became harder and harder to
+crack by hand. Where early code breaking machines were made with one goal
+cipher, I have to my disposal the Internet and the high level computer language
+Python, which are the tools I used to break these ciphers:
+\begin{itemize}
+\item Subsitution cipher
+\item Permutation cipher
+\item Subsitution and Permutation cipher
+\item Polyalphabetic cipher
+\end{itemize}
+In this paper the theory behind the Ciphers is discussed first an Example is
+given, and then a cipher made from a plain text from project Gutenberg and
+a unknown ciphering is broken. After which the flaws of the cipher in particular
+are discussed.
+
+\section{Substitution Cipher}
+A substitution cipher replaces characters of a plaintext with the characters
+of a ciphertext, following a fixed replacement system. The characters may be
+encoded from single characters to single cipher characters, but one can encode
+to many or many can encode to one, also. For example $A \rightarrow BC$ and $AB \rightarrow C$. 
+A receiver can decipher the text by performing the inverse substitution.\\
+
+\textbf{Example}\\
+A nice example of a substitution cipher is the Caesar cipher, in which a
+regular latin alphabet is shifted $n$ places to encode a plaintext.\\
+
+\begin{table}[h]
+\centerline{
+\begin{tabular}{l || cccccccccccccccccccccccccc}\toprule
+plain:  &a&b&c&d&e&f&g&h&i&j&k&l&m&n&o&p&q&r&s&t&u&v&w&x&y&z\\ \midrule
+cipher: &b&c&d&e&f&g&h&i&j&k&l&m&n&o&p&q&r&s&t&u&v&w&x&y&z&a\\ \bottomrule
+\end{tabular}
+}
+\end{table}
+
+This cipher can encode a plaintext to be unreadable at first glance:
+
+\begin{table}[h]
+\texttt{\centerline{
+\begin{tabular}{l || ccccccc}\toprule
+plaintext:  & defend & the & east & wall & of & the & castle\\ \midrule
+ciphertext: & efgfoe & uif & fbtu & xbmm & pg & uif & dbtumf\\ \bottomrule
+\end{tabular}
+}}
+\end{table}
+
+But if you think about the cipher for a bit longer you can see that there are
+only 26 possible shifts, which is so small that you can manage to write
+out the possibilities by hand. The result is that the only security comes from
+the obscurity of the cipher.\\
+
+Luckily though not all substition ciphers are this simple to decrypt,
+substitution ciphers can permute, shift and replace the characters of a cipher 
+alphabet to obscure a ciphertext.\\
+
+\textbf{Problem}\\
+A substitution problem was provided as part of an old \href{http://informationtheory.weebly.com/presentation-topics.html}{Information Theory course}
+by \href{http://home.medewerker.uva.nl/m.w.madsen/}{Mathias Winther Madsen}.
+For this course he made several cipher texts from Gutenberg plaintext.
+For each of them the information of origin language and
+cipher type was provided with the cipher.\\
+\newpage
+As a substitution cipher Mathias provided with this ciphertext:
+\lstinputlisting[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]{ciphers/substitution_cipher.txt}
+\captionof{lstlisting}{Substitution Cipher provided by Mathias}
+\vspace{20pt}
+If the cipher type was unknown, it would've been possible to deduce it by
+looking at the frequency table. Conversely if the origin language were unknown,
+but the cipher type was known; by looking at the frequency table the
+similarities between the English language and the table would be apparent.
+\newpage
+
+\begin{minipage}{0.5\textwidth}
+\vspace{-132pt}
+\centering
+\textbf{Gutenberg frequency table}\cite{Gutenberg}
+\begin{tabular}{l|c}\toprule
+Character & Frequency in \%     \\
+\midrule
+e & 12.58 \\
+t & 9.085 \\
+a & 8.000 \\
+o & 7.591 \\
+i & 6.920 \\
+n & 6.904 \\
+s & 6.340 \\
+h & 6.237 \\
+r & 5.959 \\
+d & 4.317 \\
+l & 4.057 \\
+u & 2.841 \\
+c & 2.575 \\
+m & 2.560 \\
+f & 2.350 \\
+w & 2.224 \\
+g & 1.982 \\
+y & 1.900 \\
+p & 1.795 \\
+b & 1.535 \\
+v & 0.981 \\
+k & 0.739 \\
+x & 0.179 \\
+j & 0.145 \\
+q & 0.117 \\
+z & 0.079 \\ \bottomrule
+\end{tabular}
+\caption{Frequency table of numerous collected works in the Gutenberg library.
+    \cite{Gutenberg}}
+\label{gutcipher}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\vspace{-16pt}
+\centering
+\textbf{Substitution frequency table}
+\begin{tabular}{l|c}\toprule
+Character & Frequency in \%     \\
+\midrule
+p         & 16.86 \\
+r         & 10.83 \\
+1         & 6.723 \\
+;         & 6.296 \\
+l         & 6.083 \\
+h         & 5.869 \\
+:         & 5.763 \\
+8         & 5.336 \\
+z         & 5.336 \\
+9         & 4.268 \\
+w         & 3.361 \\
+y         & 3.201 \\
+i         & 2.401 \\
+e         & 2.401 \\
+n         & 2.187 \\
+s         & 1.867 \\
+          & 1.814 \\
+f         & 1.440 \\
+o         & 1.387 \\
+-         & 1.334 \\
+7         & 1.334 \\
+c         & 1.173 \\
+v         & 0.907 \\
+d         & 0.640 \\
+t         & 0.266 \\
+x         & 0.213 \\
+q         & 0.213 \\
+a         & 0.106 \\
+.         & 0.053 \\
+,         & 0.053 \\
+k         & 0.053 \\
+b         & 0.053 \\
+u         & 0.053 \\
+g         & 0.053 \\
+m         & 0.053 \\ \bottomrule
+\end{tabular}
+\caption{Frequency table of the substitution Cipher.}
+\label{subcipher}
+\end{minipage}
+
+As seen in the frequency tables \ref{gutcipher} and \ref{subcipher} the alphabet of the cipher text is quite a lot
+bigger than the Gutenberg frequency reference I used. This causes the English
+alphabet to increase from 26 characters to 35 in this case, because of usage of
+punctuation marks.\\
+Space is the most used character in the English language so I replaced the P,
+with a space. Then in the English language the letter e is second most common,
+so I replaced the R with an e.
+
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+eVeZF19;:- :8O -8eH 8: L1 19e -LYY8 D 19eZe ;H L ZL;YOLF H eeW ;: 19e H1;ZZ;:- 8E 19e S;:WC :81 YeHH 19L: ;: 19e S8VeSe:1 8E 19e 78W;eH 8E Se:D 19e H8N;LY L:W  8Y;1;NLY  LHH;8:H 9LVe LNMI;ZeW HIN9 ;:1e:H;1FC L:W 7ee: H8 O;WeYF W;EEIHeWC 19L1 19e;Z ;:eV;1L7Ye ZeHIY1H LZe LYS8H1 ;SSeW;L1eYF  Z8WINeWD 19e  eZ;8W 8E HeeWA1;Se L:W 9LZVeH1 9LH 7eN8Se LH H98Z1 ;:  8Y;1;NLY LH ;1 ;H ;: L-Z;NIY1IZLY YL78IZD L H;:-Ye FeLZ 7Z;:-H ;1H L  Z8 Z;L1e EZI;1H 18 SL1IZ;1F ;: 19e S8ZLY LH ;: 19e  9FH;NLY O8ZYWD e;-91F FeLZH eYL HeW ;: Z8Se EZ8S 19e 1;Se O9e: 19e  8Y;1;NLY  LHH;8:H OeZe E;ZH1 H1;ZZeW 7F 1;7eZ;IH -ZLNN9IHC 7eE8Ze ;1H I:ZIYF N;1;Ke:H OeZe E;:LYYF HI7WIeW 7F 19e LZ1C 8Z WeN;SL1eW 7F 19e NZIeY1F 8E 8N1LV;IHD e:-YL:W I:WeZOe:1 H;X FeLZH 8E N;V;Y OLZ L:W HIEEeZ;:-C 7eE8Ze 19e LS7;1;8: L:W SLW:eHH 8E 19e Y8:-  LZY;LSe:1 OeZe eX eYYeW 7F 19e  IZ-e 8E  Z;WeC 8Z NZIH9eW 7F 19e HO8ZW 8E NZ8SOeYYB 1OeYVe FeLZH eYL HeW 7e1Oee: 19e N8:V8NL1;8: 8E 19e H1L1eHA-e:eZLY ;: ,U.GC L:W 19e eX1;:N1;8: 8E 19e Y;Ne:He 8E 19e EZe:N9 ZeV8YI1;8: 7F 19e LZS 8E :L 8Ye8:D 7I1C 8: 19;H 8NNLH;8:C ;: 8:e FeLZC LYYC ;: 19e SeL:1;Se L1 YeLH1C 9LH 7ee: LNN8S Y;H9eWD eZe 19e YeLVeHC O9;N9 I:E8YWeW ;: H Z;:- LS;WH1 19e 8VeZ19Z8O 8E 19Z8:eHC L:W 19e 1ZL:H 8Z1H 8E ZeV8YI1;8:;H1H 8VeZ 19e O8ZYWC 9LW ELYYe: ;: LI1IS:C 19e  LHH;8:H O9;N9 9LW N8:VIYHeW SL:T;:W OeZe NZIH9eW E8Z 19e 1;SeC L:W 19e 1Z;IS 9H 8E WeS8NZLNF OeZe LZZeH1eWD L 1eZZ;7Ye ZeLN1;8: 9LW He1 ;:Q eX eZ;e:Ne 8E HIEEeZ;:- 9LW W8:e ;1H O8ZTQ L:W HO;E1 LH 19e H9LWeH 8E :;-91 7eE8Ze 19e ZLFH 8E 19e LHNe:W;:- HI:C 9LW W;HL  eLZeW 19e EeZSe:1 8E ZeV8YI1;8: 7eE8Ze 19e LZ8IHeW ;:W;-:L1;8: 8E 19e I:N8ZZI 1eW  LZ1 8E SL:T;:WD 19e HLSe  LHH;8:H SLF L-L;: LZ;HeQ 19e HLSe WeYIH;8:H L-L;: H ZeLWC LH H;: H Z;:-H I  LEZeH9 ;: HINNeHH;Ve -e:eZL1;8:H 8E Se:Q 7I1 Oe T:8O 19e ZeHIY1D 19eF O;YYC Y;Te 19e OLFH 8E 19e I:Z;-91e8IHC 7e L-L;: NZIH9eWD
+\end{lstlisting}
+\caption[lstlisting]{Substitution Cipher provided by Mathias, with p and r
+replaced}
+\vspace{20pt}
+
+At this step some patterns become visible as words mostly have the right length,
+and trigrams can be spotted. A Trigram is a combination of three characters
+making up part of or a whole word. The most common trigram in the English
+language is `the', so `19e', a Trigram found often in this ciphertext, is
+probably corresponding to `the'.
+\newpage
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+eVeZFth;:- :8O -8eH 8: Lt the -LYY8 D theZe ;H L ZL;YOLF H eeW ;: the Ht;ZZ;:- 8E the S;:WC :8t YeHH thL: ;: the S8VeSe:t 8E the 78W;eH 8E Se:D the H8N;LY L:W  8Y;t;NLY  LHH;8:H hLVe LNMI;ZeW HINh ;:te:H;tFC L:W 7ee: H8 O;WeYF W;EEIHeWC thLt the;Z ;:eV;tL7Ye ZeHIYtH LZe LYS8Ht ;SSeW;LteYF  Z8WINeWD the  eZ;8W 8E HeeWAt;Se L:W hLZVeHt hLH 7eN8Se LH Hh8Zt ;:  8Y;t;NLY LH ;t ;H ;: L-Z;NIYtIZLY YL78IZD L H;:-Ye FeLZ 7Z;:-H ;tH L  Z8 Z;Lte EZI;tH t8 SLtIZ;tF ;: the S8ZLY LH ;: the  hFH;NLY O8ZYWD e;-htF FeLZH eYL HeW ;: Z8Se EZ8S the t;Se Ohe: the  8Y;t;NLY  LHH;8:H OeZe E;ZHt Ht;ZZeW 7F t;7eZ;IH -ZLNNhIHC 7eE8Ze ;tH I:ZIYF N;t;Ke:H OeZe E;:LYYF HI7WIeW 7F the LZtC 8Z WeN;SLteW 7F the NZIeYtF 8E 8NtLV;IHD e:-YL:W I:WeZOe:t H;X FeLZH 8E N;V;Y OLZ L:W HIEEeZ;:-C 7eE8Ze the LS7;t;8: L:W SLW:eHH 8E the Y8:-  LZY;LSe:t OeZe eX eYYeW 7F the  IZ-e 8E  Z;WeC 8Z NZIHheW 7F the HO8ZW 8E NZ8SOeYYB tOeYVe FeLZH eYL HeW 7etOee: the N8:V8NLt;8: 8E the HtLteHA-e:eZLY ;: ,U.GC L:W the eXt;:Nt;8: 8E the Y;Ne:He 8E the EZe:Nh ZeV8YIt;8: 7F the LZS 8E :L 8Ye8:D 7ItC 8: th;H 8NNLH;8:C ;: 8:e FeLZC LYYC ;: the SeL:t;Se Lt YeLHtC hLH 7ee: LNN8S Y;HheWD eZe the YeLVeHC Oh;Nh I:E8YWeW ;: H Z;:- LS;WHt the 8VeZthZ8O 8E thZ8:eHC L:W the tZL:H 8ZtH 8E ZeV8YIt;8:;HtH 8VeZ the O8ZYWC hLW ELYYe: ;: LItIS:C the  LHH;8:H Oh;Nh hLW N8:VIYHeW SL:T;:W OeZe NZIHheW E8Z the t;SeC L:W the tZ;IS hH 8E WeS8NZLNF OeZe LZZeHteWD L teZZ;7Ye ZeLNt;8: hLW Het ;:Q eX eZ;e:Ne 8E HIEEeZ;:- hLW W8:e ;tH O8ZTQ L:W HO;Et LH the HhLWeH 8E :;-ht 7eE8Ze the ZLFH 8E the LHNe:W;:- HI:C hLW W;HL  eLZeW the EeZSe:t 8E ZeV8YIt;8: 7eE8Ze the LZ8IHeW ;:W;-:Lt;8: 8E the I:N8ZZI teW  LZt 8E SL:T;:WD the HLSe  LHH;8:H SLF L-L;: LZ;HeQ the HLSe WeYIH;8:H L-L;: H ZeLWC LH H;: H Z;:-H I  LEZeHh ;: HINNeHH;Ve -e:eZLt;8:H 8E Se:Q 7It Oe T:8O the ZeHIYtD theF O;YYC Y;Te the OLFH 8E the I:Z;-hte8IHC 7e L-L;: NZIHheWD
+\end{lstlisting}
+\caption[lstlisting]{Substitution Cipher provided by Mathias, `the' trigram identified}
+\vspace{20pt}
+I used a mixture of substitution and filling to make sense piece by piece.
+
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+e_e__th___ ___ __e_ __ _t the _______ the_e __ _ _______ __ee_ __ the _t______ __ the _____ __t _e__ th__ __ the ___e_e_t __ the ____e_ __ _e__ the ______ ___ ____t____ ________ h__e ______e_ ___h __te___t__ ___ _ee_ __ ___e__ ______e__ th_t the__ __e__t___e _e___t_ __e _____t ___e___te__ ______e__ the _e____ __ _ee__t__e ___ h___e_t h__ _e___e __ _h__t __ ____t____ __ _t __ __ _______t____ _______ _ _____e _e__ ______ _t_ _________te ____t_ t_ __t___t_ __ the _____ __ __ the _h______ ______ e__ht_ _e___ e____e_ __ ___e ____ the t__e _he_ the ____t____ ________ _e_e ____t _t___e_ __ t__e____ _____h___ _e___e _t_ ______ __t__e__ _e_e _______ _____e_ __ the __t_ __ _e____te_ __ the ___e_t_ __ __t______ e______ ___e__e_t ___ _e___ __ _____ ___ ___ ____e_____ _e___e the ____t___ ___ ____e__ __ the ____ _______e_t _e_e e__e__e_ __ the ____e __ ____e_ __ ____he_ __ the _____ __ _____e___ t_e__e _e___ e____e_ _et_ee_ the _______t___ __ the _t_te___e_e___ __ _____ ___ the e_t___t___ __ the ___e__e __ the __e__h _e____t___ __ the ___ __ _____e___ __t_ __ th__ _________ __ __e _e___ ____ __ the _e__t__e _t _e__t_ h__ _ee_ _________he__ e_e the _e__e__ _h__h ______e_ __ ______ _____t the __e_th___ __ th___e__ ___ the t_______t_ __ _e____t_____t_ __e_ the ______ h__ ____e_ __ __t____ the ________ _h__h h__ _______e_ _______ _e_e ____he_ ___ the t__e_ ___ the t_____h_ __ _e_______ _e_e ___e_te__ _ te_____e _e__t___ h__ _et ___ e__e__e__e __ ____e____ h__ ___e _t_ _____ ___ ____t __ the _h__e_ __ ___ht _e___e the ____ __ the ___e_____ ____ h__ ______e__e_ the _e__e_t __ _e____t___ _e___e the _____e_ _______t___ __ the ________te_ ___t __ ________ the ___e ________ ___ _____ ____e_ the ___e _e_______ _____ ___e___ __ ___ _______ __ ___e_h __ ____e____e _e_e__t____ __ _e__ __t _e ____ the _e___t_ the_ _____ ___e the ____ __ the _____hte____ _e _____ ____he__
+\end{lstlisting}
+\caption[lstlisting]{Plaintext(decrypted),`the' trigram identified}
+\vspace{20pt}
+At this point multiple vowels and consonants can be substituted because of
+incomplete words like the\_e th\_\_ th\_t, and frequencies fitting these
+substituting vowels and consonants.\\
+
+Switching between substitution and mixing, more words like i\_, and
+\_tirri\_\_, and ha\_e seem to fit common English words.
+And so piece by piece an English text is retrieved:
+
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+everything now goes on at the gallop. there is a railway speed in the stirring of the mind, not less than in the movement of the bodies of men. the social and political passions have acquired such intensity, and been so widely diffused, that their inevitable results are almost immediately produced. the period of seed-time and harvest has become as short in political as it is in agricultural labour. a single year brings its appropriate fruits to maturity in the moral as in the physical world. eighty years elapsed in rome from the time when the political passions were first stirred by tiberius gracchus, before its unruly citizens were finally subdued by the art, or decimated by the cruelty of octavius. england underwent six years of civil war and suffering, before the ambition and madness of the long parliament were expelled by the purge of pride, or crushed by the sword of cromwell: twelve years elapsed between the convocation of the states-general in 1789, and the extinction of the license of the french revolution by the arm of napoleon. but, on this occasion, in one year, all, in the meantime at least, has been accomplished. ere the leaves, which unfolded in spring amidst the overthrow of thrones, and the transports of revolutionists over the world, had fallen in autumn, the passions which had convulsed mankind were crushed for the time, and the triumphs of democracy were arrested. a terrible reaction had set in; experience of suffering had done its work; and swift as the shades of night before the rays of the ascending sun, had disappeared the ferment of revolution before the aroused indignation of the uncorrupted part of mankind. the same passions may again arise; the same delusions again spread, as sin springs up afresh in successive generations of men; but we know the result. they will, like the ways of the unrighteous, be again crushed.
+\end{lstlisting}
+\caption[lstlisting]{Plaintext(solution): BLACKWOOD'S MAGAZINE, Jan. 1845}
+\vspace{20pt}
+
+The complete cipher alphabet that was found is:
+\begin{table}[h]
+    \vspace{-20pt}
+    \texttt{
+    \begin{tabular}{lc}
+        Plain:  & abcdefghiklmnopqrstuvwxyz ,-.1789:;\\
+        Cipher: & -:,.fy9suzaqcwp;rmk7vdxlrp1g8tbohni
+    \end{tabular}}
+\end{table}
+
+\textbf{Vulnerabilities}\\
+The problem with this cipher is that with frequency analysis and knowledge of
+English words, these texts can be decoded fast.
+This is because the character frequency distribution remains similair to the
+original one.
+
+\section{Permutation Cipher}
+A Permutation Cipher is a Cipher that scrambles characters of a plaintext in
+blocks of a fixed length. The Permutation cipher is part of the transposition
+cipher family. Transposition ciphers permute characters using a bijective
+function to encode and decode using the inverse function.\\
+
+\textbf{Example}\\
+An example of a permutation cipher in which a piece of plaintext is encoded
+with the key: \textit{5406312}. The key encodes blocks of 7 characters long.\\
+\begin{table}[h]
+    \texttt{
+    \begin{tabular}{lc}
+        Plain:  & This is a test\\
+        Cipher: & iis hTs stea t
+    \end{tabular}}
+\end{table}
+
+\textbf{Problem}\\
+The permutation problem was provided by Mathias Winther Madsen.
+This cipher again finds it's origin from the Gutenberg library.
+\lstinputlisting[
+    breakindent=0.0pt,
+    breaklines,
+    basicstyle=\tiny\ttfamily,
+]{ciphers/permutation_cipher.txt}
+\caption[lstlisting]{Permutation Cipher provided by Mathias}
+\vspace{20pt}
+
+\newpage
+
+\begin{minipage}{0.5\textwidth}
+\vspace{-118pt}
+\centering
+\textbf{Gutenberg frequency table}\cite{Gutenberg}
+\begin{tabular}{l|c}\toprule
+Character & Frequency in \%     \\
+\midrule
+e & 12.58 \\
+t & 9.085 \\
+a & 8.000 \\
+o & 7.591 \\
+i & 6.920 \\
+n & 6.904 \\
+s & 6.340 \\
+h & 6.237 \\
+r & 5.959 \\
+d & 4.317 \\
+l & 4.057 \\
+u & 2.841 \\
+c & 2.575 \\
+m & 2.560 \\
+f & 2.350 \\
+w & 2.224 \\
+g & 1.982 \\
+y & 1.900 \\
+p & 1.795 \\
+b & 1.535 \\
+v & 0.981 \\
+k & 0.739 \\
+x & 0.179 \\
+j & 0.145 \\
+q & 0.117 \\
+z & 0.079 \\ \bottomrule
+\end{tabular}
+\caption{Frequency table of numerous collected works in the Gutenberg library.
+    \cite{Gutenberg}}
+\label{gut2cipher}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\vspace{-16pt}
+\centering
+\textbf{Permutation frequency table}
+\begin{tabular}{l|c}\toprule
+Character & Frequency in \%     \\
+\midrule
+  & 17.95 \\
+e & 9.210 \\
+t & 8.458 \\
+o & 7.236 \\
+n & 6.672 \\
+i & 6.203 \\
+a & 6.015 \\
+h & 4.699 \\
+s & 4.464 \\
+r & 4.464 \\
+c & 2.772 \\
+d & 2.678 \\
+f & 2.584 \\
+l & 2.302 \\
+p & 1.926 \\
+, & 1.785 \\
+y & 1.691 \\
+u & 1.503 \\
+g & 1.315 \\
+b & 1.315 \\
+w & 1.315 \\
+m & 1.268 \\
+v & 0.892 \\
+. & 0.375 \\
+" & 0.187 \\
+k & 0.140 \\
+q & 0.140 \\
+- & 0.093 \\
+; & 0.093 \\
+4 & 0.046 \\
+7 & 0.046 \\
+5 & 0.046 \\
+1 & 0.046 \\
+j & 0.046 \\ \bottomrule
+\end{tabular}
+\caption{Frequency table of the permutation cipher.}
+\label{permcipher}
+\end{minipage}
+
+When looking at the frequencies\ref{gut2cipher}\ref{permcipher} it can be seen
+that the English frequencies are intact and it follows that the ciphertext is
+a form of a transposition cipher.\\
+
+An \href{http://tholman.com/other/transposition/}{online tool}\footnote{\url{http://tholman.com/other/transposition/}}
+was found for convenient columnar switching of a ciphertext.
+
+Because the text starts with two spaces this implies the text starts with two
+words followed by spaces. Using the tool and slowly increasing the blocksize of
+the permutation, at a blocksize of seven the solution was found. The words in
+the first block are ``but in ''.\\
+
+\textbf{Solution}
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+but in the british empire, for a century past, it has been thoroughly understood, by men of sense of all parties, that a change of dynasty is out of the question, and that there is no reform worth contending for in the state, which is not to be effected by the means which the constitution itself has provided. this conviction, long impressed upon the nation, and interwoven as it were with the very framework of the british mind, having come to coincide with the passions incident to party divisions in a free state, has in process of time produced the strange and tortuous policy which, for above a quarter of a century, has now been followed in this country by the government, and lauded to the skies by the whole liberal party on the continent. deprived of the watchwords of men, the parties have come to assume those of things. organic or social change have become the war-cry of faction, instead of change of dynasty. the nation is no longer drenched with blood by armies fighting for the red or the white rose, by parties striving for the mastery between the stuart and hanover families, but it was not less thoroughly divided by the cry of "the bill, the whole bill, and nothing but the bill," at one time, and that of "free-trade and cheap corn" at another. social change, alterations of policy, have thus come to be the great objects which divide the nation; and, as it is ever the policy of opposition to represent the conduct of government as erroneous, it follows, as a necessary consequence, that the main efforts of the party opposed to administration always have been, since the suppression of the rebellion in 1745, to effect, when in opposition, a change in general opinion, and, when in power, to carry that change into effect by a change of policy. the old law of nature is still in operation. action and reaction rule mankind; and in the efforts of parties mutually to supplant each other in power, a foundation is laid for an entire change of policy at stated periods, and an alteration, as great as from night to day, in the opinions and policy of the ruling party in the same state at different times.   
+\end{lstlisting}
+\caption[lstlisting]{Plaintext(solution): Essays Political Historical vol. 3, page 292}
+\vspace{20pt}
+
+The key for the permutation cipher is 5641230.\\
+\newpage
+\textbf{Vulnerabilities}\\
+With enough computer power every ‘anagram’ at every blocksize can theoretically
+be calculated and matched with an English dictionary to have anagrams match
+legitimate words, thus the code can be brute forced. In practice, with large
+blocksizes, this is pretty hard. A ciphertext can easily be matched with
+several plaintexts that follow an English dictionary.
+\clearpage
+
+\section{Substitution and Permutation cipher}
+This cipher combines the previous Substitution and Permutation ciphers in one.\\
+
+\textbf{Problem}\\
+This problem was again provided by Mathias Winther Madsen.
+The cipher is from the Gutenberg library.
+
+\lstinputlisting[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]{ciphers/permutation_and_substitution_cipher.txt}
+\caption{Permutation \& Substitution Cipher provided by Mathias}
+
+\begin{minipage}{0.5\textwidth}
+\vspace{-132pt}
+\centering
+\textbf{Gutenberg frequency table}\cite{Gutenberg}
+\begin{tabular}{l|c}\toprule
+Character & Frequency in \%     \\
+\midrule
+e & 12.58 \\
+t & 9.085 \\
+a & 8.000 \\
+o & 7.591 \\
+i & 6.920 \\
+n & 6.904 \\
+s & 6.340 \\
+h & 6.237 \\
+r & 5.959 \\
+d & 4.317 \\
+l & 4.057 \\
+u & 2.841 \\
+c & 2.575 \\
+m & 2.560 \\
+f & 2.350 \\
+w & 2.224 \\
+g & 1.982 \\
+y & 1.900 \\
+p & 1.795 \\
+b & 1.535 \\
+v & 0.981 \\
+k & 0.739 \\
+x & 0.179 \\
+j & 0.145 \\
+q & 0.117 \\
+z & 0.079 \\ \bottomrule
+\end{tabular}
+\caption{Frequency table of numerous collected works in the Gutenberg library.
+    \cite{Gutenberg}}
+\label{gut3cipher}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\vspace{-16pt}
+\centering
+\textbf{Permutation frequency table}
+\begin{tabular}{l|c}\toprule
+Character & Frequency in \%     \\
+\midrule
+J & 17.70 \\
+I & 10.25 \\
+Z & 6.642 \\
+' & 6.496 \\
+T & 5.985 \\
+F & 5.802 \\
+? & 5.620 \\
+U & 5.583 \\
+Q & 5.364 \\
+" & 4.525 \\
+! & 4.379 \\
+. & 2.445 \\
+X & 2.226 \\
+S & 2.189 \\
+A & 1.970 \\
+D & 1.897 \\
+O & 1.642 \\
+M & 1.569 \\
+L & 1.532 \\
+- & 1.423 \\
+K & 1.204 \\
+V & 1.058 \\
+W & 0.620 \\
+B & 0.620 \\
+P & 0.291 \\
+C & 0.218 \\
+E & 0.182 \\
+R & 0.109 \\
+Y & 0.109 \\
+H & 0.072 \\
+; & 0.072 \\
+G & 0.072 \\
+, & 0.036 \\
+  & 0.036 \\
+N & 0.036 \\ \bottomrule
+\end{tabular}
+\caption{Frequency table of the permutation and substitution cipher.}
+\label{permsubcipher}
+\end{minipage}
+
+Finding the solution is a process of small increments just like with the
+Substitution cipher.
+Frequency analysis of the Cipher text gives the following tables
+\ref{gut3cipher}\ref{permsubcipher}, with a total of 35 different characters.\\
+
+Space is the most used character in the English language so I replaced the J,
+with a space. Then in the English language the characters e and t are most
+frequent, so I and Z are replaced.
+
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+QU Tt QG?Det UOUtQ?QtS'?.t '-!Fe!T F?" -QU T eUF!. E?Q"D U"FO'tTtU?tD  L?FU. O-FeT!t!!eeS -FM'AeT-t ?t!Q  "'et. '..Tte !TS'Q  WUX'Tte F?eFA AUet e!eL  MTeFFULB?SQe? U?Ft!t T"et Tt?D e-eL 'e!t 'eFQU T Tte?. Qt;!?AP 'FeG e-!MUO"? T .Fe'S"e QQt? TtD ?tUeT  Q 'TTDQ t"?Fe X' eATt-e F' t'O'SQ' .Q; ttER 'K "DF? FteT -!eT!OFte MT"e?DQ e!O!Q "FeO'-K  " XtX?K 'eT MDQ-D e'TO Ve!U?"!K L?FUt ?"FUtFFOUTA LtUTD QU T XX?UB WT-F' DQU!.U FQ" Fe 'D't e?!eFUQ?LUTA tF?" E!.' MTQ? A? FeAL?U "Ut'?t.'  F"FMUA eXT eP"''Q'tA e!tD "eXTSU tW- QUU Q'QVAeX KU" e'tU!KSQTte eeSFQ TDU eF 'TS't' DXV? PU FeSeT t 'T'SQ'!'YXT eWAM- !FQ'eTDFU"A Q? D UXee! ".eB At'!" eeTQeQ!V F''UQ?USS"e F't T-K" UQU?!SLQXO .e!?LTSD ?Me?S! QeQ"Qe"F ? LF!'SXO?t? "KetBee -K '-!FU  - eQTt''XTS!AQ W?T! W QPU!eQ"QUAU T e.S.?F'?Ut-XMet"F ? "U ?Q e.TQ tSXeU."F' t'FeUTQ .FF'U SFeeS'!A. eT t Q!tU.F?" M"? T eB!eFQeV" e!"U? .U' K eQt LAFU ee"?e"FUBH OWtF??UX"F ? ,U?Xe!eeD QX'? 'AF?  ttQL. UeT ttQ!eKQ ' Dt't!U eT!V'V?Ut'?KVO' FUTQ FF'"S Wt SO!'LeLF?" etUtX F eeXeD! "e"X etTeLUeK- " "AF'OQ!?e't  e eteQ!U eTeUF!.F'S "'A! e?A" e?TV e M?-VT '"F "QeV Ft''?TB 'UTA e Qt? S TeT .UeUTte F- '!U.TOtOVQ' XWQ t! tUOK?DQ t!? . ..eU"tF e!Tt UDeeF!LD TMe'FD 'Xet. XX ?  eDTtStTe!eFQ"e.'  Q eSF'UBSF' "'etTte . M?t." e"FtSeetFU  "eQX?Kt?t -UTFS?Tte LQUL" eS.?!S TXOeL !?? F'tFF'U tF eS "VF?QUe?!t!T'D?X" -eT  W "t?TFe P? QQUT t??eTte ttR!e tU-Ae .t' Q SeTX'Y'TA'M'!"F ?  QT?DFUL"UQU T eS ?.T UFU?TF Q E?Q"t T"FTL O''K- ? .D' e"!F' XQO.U!tUVF?" Q!t'Q F eLFMe B! QF?DK ?D'"e Ttt eFUMQ !? "QF?UKFK'X?' L W""OT ?W!QUM!!'T D  "K?T FLeeFULBUAU T eB! ?eQB - eX!eOt!SeQ tMe XQXU"' 't!e B'MA UT!VeAUFULQQ'VFO AU T  eFTtQeQSe -'tUe!t .FUL!UtF'U QU T A'M'! 'Qt  P.ee AL'!t T"'. 't?BUeL!QQ eFV !FU!e -? "!F?FetVeeSMF?UTSD T eMT'' t TS OA!?ee.D 'M" "FXOK et'Q?Ue ' K-XFUe?t!.' "UTQ A..e' "e "F ""F?OLQQU "Qet''XTSXeX.YWQ D'F 'eTt TMD.e'!e M?e!eQM'!"F ? e" ?A QDUTt '-?"!Q?DeT t !'M'" F"U LF U'SUTTD eTT ? L"? FtU?FeS 'tFeO'Tte !eRSe Ut'?!? FQF'VU ""e tFLFeU.' .Q!eT t Q-M'K'T D eU"!SQ?  MV ?eT"e QQAeMTt'LMC 'TOt UTet  C? .. '"FD'eXXUTA "tFUO Tte X?QD -AU T et!FeeT t QOe'TeTF W MT-!BeeD'D ?M!Tte QXF-' "? X  '"TDF '"UVOK t"U ?!EA UTM! '.O'LTt!Le T eTFeK e"?eB"?T FQU U"Q 'S?e!L X?O.F?FA t '!e"!Q?DAUMT  eST "X O' tK'F. etO" UXee!QtQ "teQeQe 'AU T eV?V?X?A ! tKQ'ePF'!!?teT WT"etQU e! eXXKAeeAM" e!t TFUUA" e' .tQQU T M- 'Ht? Tt t?OKDe . !OQ'T"? T V?QXeQ U"e eTSFe.X eX?X teT t teS!DF"eeT' .QQeF ' VV'OQ "teQeK  'XUtOL.'  -.etTtDCT Wt Tt?CM FeQ ?eTt '"UAUQT M. XeQOtAC etK . eeTFULXe.'  Q ADUTQ t'TQ" F?BFU'S"e tSt T.'!SU e M?eAt T"F.e'!eT ?e!'Ft QeT t QFS'SQOF'U Q'QeFUF .FeSS''t  eVV'OQT Ut!U  NAFF'?SU.F tFU  "T e-A tt!?VOK '"U ?!MACUT eQT M" U?T eQ?''Pt 'e!L ? FeLeF" " -tK T ?eT? F"FeX" "eTAt !S'? t TQQ?XD e   WF
+\end{lstlisting}
+\vspace{20pt}
+After applying the partial decoding, it is time to unscramble using the
+\href{http://tholman.com/other/transposition/}{online tool}\footnote{\url{http://tholman.com/other/transposition/}}
+that was also used in the previous permutation cipher. From the length of the
+ciphertext a few possible permutation blocksizes are possible. Blocksizes in
+permutation ciphers are whole divisors, the text has a length of 2740,
+so possible blocksizes are: [1, 2, 4, 5, 10, 20, 137, 274, 548, 685, 1370].
+Using again frequency research and seeing that the most common first letter of a
+word is a t and the most common last letter of a word is an e\cite{Gutenberg},
+it follows it is best to find the permutation that holds to this rule the best.\\
+
+A block size of two fails to remove multiple spaces behind eachother, so a
+blocksize of two is discarded. Permutations with a block size of 4 either have
+multiple spaces, or single t's in them. At a blocksize of 5 a anagram was found
+that fullfills the above rule and does not have the problem of multiple spaces
+or singleton t's. The anagram looks like this:
+
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+tTUQ D?Q GOUte Q?tUQ.?St'!- t' TeF!- ?F" TUQ .!UeF"QE ?F" DUtT'Ot D?UtUFL ?F- .O!tTe! Se!eA'F-M tTe- Qt?!te" '.. .'! tTe QST''XW UF tTe Ae?F tUAe L!eeFeM T?BUFL ?QSe!t?UFe" tT?t tTe- De!e L'Fe t' TUQ .?tTe!;Q t' A?Pe eFGOU!-M T?" S'F.eQQe" tT?t Ut D?Q Te DT' T?" Qt'XeF tTe A'Fe- 'Ot '. QS'tt;Q K'RE ?F" DTeF tTe- !etO!Fe"M Te D?Q QO!!'OF"e" K- ?XX tTe K'-QM DT' De!e OVK!?U"UFL ?F" t?OFtUFL TUA DUtT TUQ BUXX?F-W TUQ 'DF .!UeF"Q t'' De!e ?L?UFQt TUAE ?F"M .!'A QT?Ae ?F" ?LUt?tU'F '. AUF"M Te X''Pe" A'Qt D!etSTe"X-W Ut UQ UAV'QQUKXe t' "eQS!UKe tTe QSeFe DTUST F'D t''P VX?Se UF tTe QST''XY!''AW TeF!-M DT'Qe AUF" D?Q !eXUeBe" .!'A tTe "eV!eQQU'F 'SS?QU'Fe" K- tTUQ "UQL!?Se.OX ST?!LeM D?Q S?!eQQe" ?F" S'FL!?tOX?te" K- eBe!- K'- UF tTe QST''XW A!QW T?!!UQ PUQQe" TUA ?..eStU'F?teX-M ?F" Q?U" QTe .eXt S'F.U"eFt '. TUQ UFF'SeFSe .!'A tTe .U!QtM ?F" T?" FeBe! "eQV?U!e" '. UtQ KeUFL A?"e eBU"eFtW HOXU?F? ?F" eXU,? De!e ?XQ' ?A'FLQt tTe .U!Qt t' KeQt'D tTeU! ?VV!'K?tU'F OV'F TUQ S'F"OStW Le'!Le ?F" XUttXe Fe" De!e "eXULTte" Ke-'F" Ae?QO!e t' Qee tTeU! .!UeF" 'FSe A'!e A?"e T?VV-M ?F" T'Ve" Q''F t' T?Be TUA ?Q tTe STUe. UF tTeU! -'OtT.OX QV'!tQW KOt Ut D?Q .?! "U..e!eFt DUtT L!eeFeM DT' F'D .eXt ?XX tTe D!etSTe"FeQQ '. 'Fe S'FBUSte" '. tTe.tM ?F" "eteSte" UF K?QeX- ?tt?STUFL tTe "UQL!?Se.OX ST?!Le t' ?F UFF'SeFt ?F" V!?UQeD'!tT- X?"W Te T?" t?PeF TUQ Qe?t ?t tTe eRt!eAUt- '. tTe QST''XY!''AM ?F" D?Q TU"UFL TUQ .?Se UF TUQ T?F"QE ?F" tT'OLT ? K'- '. D'F"e!.OX QVU!UtQ ?F" Qt!'FL Fe!BeM D?Q F'D K?tTe" UF te?!QM ?F" Q'KKUFL ?X'O"W "!W T?!!UQM DT' T?" KeeF LUBUFL TUA ? Be!- QeBe!e XeStO!eM QtUXX Qt''" 'Be! TUAM UAV!eQQUFL OV'F TUA tTe FeSeQQUt- '. !etU!UFL UFt' TUQ !''AM t' QeeP .!'A L'" tT?t .'!LUBeFeQQ UF V!?-e! ?F" !eVeFt?FSeM DTUSTM Te t'' AOST .e?!e"M D'OX" F't Ke e?QUX- 'Kt?UFe" .!'A TUQ '..eF"e" ?F" "UQLOQte" QST''XY.eXX'DQW Te F'DM tTe!e.'!eM ?!'QeM ?F" A?"e TUQ D?- t'D?!"Q tTe "''!M UF "'UFL DTUST Te T?" ?L?UF t' eFS'OFte! tTe eReS!?tU'FQ ?F" V'UFte" .UFLe!Q '. tTe K'-QM DT' S!Ue"M ?Q Te V?QQe" tTeAM CL'M tT'O tTUe. C ?F" .'XX'De" TUA OFtUX tTe- Q?D TUA eFte! tTe T'OQeW TeF!-M T'DeBe!M D?Q tTe 'FX- X?" DT' "U" F't OVK!?U" TUAE .'!M tT'OLT L!eeFe T?" KeT?Be" UF Q' "UQL!?Se.OX ? A?FFe! t'D?!"Q TUAM Te S'OX" F't KOt .eeX "UQt!eQQe" t' Qee TUA ?VVe?! ?XA'Qt K!'PeFTe?!te"W Te QtUXX !eAeAKe!e"M UF tTe AU"Qt '. TUQ H'-M tT?t KOt ? .eD T'O!Q T?" eX?VQe" QUFSe Te .eXt ?XX tTe D!etSTe"FeQQ '. 'Fe QOVV'Qe" t' Ke LOUXt- '. tTe.tW CDT?t tTeFMC Te Q?U" t' TUAQeX.M CAOQt Ke tTe .eeXUFLQ '. TUA DT' Qt?F"Q S'FBUSte" '. tTe S!UAeM ?F" tTe!e.'!e T?Q F't tTe S'FQSU'OQFeQQ '. UFF'SeFSe t' QOVV'!t TUAN U S?FF't .UF" UF A- Te?!t t' OVK!?U" TUAMC Te Q?U"M ?Q Te t''P Le'!Le ?F" Fe" K- tTe T?F" ?F" Xe" tTeA ?S!'QQ tTe X?DFW   
+\end{lstlisting}
+\vspace{20pt}
+From here we start filling in letters like with the substitution cipher.
+The first step is identifying the `the' trigram and most common word in the
+English language, tTe fills is the most common trigram in the ciphertext so tTe
+is most probably the.
+
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+thUQ D?Q GOUte Q?tUQ.?St'!- t' heF!- ?F" hUQ .!UeF"QE ?F" DUth'Ot D?UtUFL ?F- .O!the! Se!eA'F-M the- Qt?!te" '.. .'! the QSh''XW UF the Ae?F tUAe L!eeFeM h?BUFL ?QSe!t?UFe" th?t the- De!e L'Fe t' hUQ .?the!;Q t' A?Pe eFGOU!-M h?" S'F.eQQe" th?t Ut D?Q he Dh' h?" Qt'XeF the A'Fe- 'Ot '. QS'tt;Q K'RE ?F" DheF the- !etO!Fe"M he D?Q QO!!'OF"e" K- ?XX the K'-QM Dh' De!e OVK!?U"UFL ?F" t?OFtUFL hUA DUth hUQ BUXX?F-W hUQ 'DF .!UeF"Q t'' De!e ?L?UFQt hUAE ?F"M .!'A Qh?Ae ?F" ?LUt?tU'F '. AUF"M he X''Pe" A'Qt D!etShe"X-W Ut UQ UAV'QQUKXe t' "eQS!UKe the QSeFe DhUSh F'D t''P VX?Se UF the QSh''XY!''AW heF!-M Dh'Qe AUF" D?Q !eXUeBe" .!'A the "eV!eQQU'F 'SS?QU'Fe" K- thUQ "UQL!?Se.OX Sh?!LeM D?Q S?!eQQe" ?F" S'FL!?tOX?te" K- eBe!- K'- UF the QSh''XW A!QW h?!!UQ PUQQe" hUA ?..eStU'F?teX-M ?F" Q?U" Qhe .eXt S'F.U"eFt '. hUQ UFF'SeFSe .!'A the .U!QtM ?F" h?" FeBe! "eQV?U!e" '. UtQ KeUFL A?"e eBU"eFtW HOXU?F? ?F" eXU,? De!e ?XQ' ?A'FLQt the .U!Qt t' KeQt'D theU! ?VV!'K?tU'F OV'F hUQ S'F"OStW Le'!Le ?F" XUttXe Fe" De!e "eXULhte" Ke-'F" Ae?QO!e t' Qee theU! .!UeF" 'FSe A'!e A?"e h?VV-M ?F" h'Ve" Q''F t' h?Be hUA ?Q the ShUe. UF theU! -'Oth.OX QV'!tQW KOt Ut D?Q .?! "U..e!eFt DUth L!eeFeM Dh' F'D .eXt ?XX the D!etShe"FeQQ '. 'Fe S'FBUSte" '. the.tM ?F" "eteSte" UF K?QeX- ?tt?ShUFL the "UQL!?Se.OX Sh?!Le t' ?F UFF'SeFt ?F" V!?UQeD'!th- X?"W he h?" t?PeF hUQ Qe?t ?t the eRt!eAUt- '. the QSh''XY!''AM ?F" D?Q hU"UFL hUQ .?Se UF hUQ h?F"QE ?F" th'OLh ? K'- '. D'F"e!.OX QVU!UtQ ?F" Qt!'FL Fe!BeM D?Q F'D K?the" UF te?!QM ?F" Q'KKUFL ?X'O"W "!W h?!!UQM Dh' h?" KeeF LUBUFL hUA ? Be!- QeBe!e XeStO!eM QtUXX Qt''" 'Be! hUAM UAV!eQQUFL OV'F hUA the FeSeQQUt- '. !etU!UFL UFt' hUQ !''AM t' QeeP .!'A L'" th?t .'!LUBeFeQQ UF V!?-e! ?F" !eVeFt?FSeM DhUShM he t'' AOSh .e?!e"M D'OX" F't Ke e?QUX- 'Kt?UFe" .!'A hUQ '..eF"e" ?F" "UQLOQte" QSh''XY.eXX'DQW he F'DM the!e.'!eM ?!'QeM ?F" A?"e hUQ D?- t'D?!"Q the "''!M UF "'UFL DhUSh he h?" ?L?UF t' eFS'OFte! the eReS!?tU'FQ ?F" V'UFte" .UFLe!Q '. the K'-QM Dh' S!Ue"M ?Q he V?QQe" theAM CL'M th'O thUe. C ?F" .'XX'De" hUA OFtUX the- Q?D hUA eFte! the h'OQeW heF!-M h'DeBe!M D?Q the 'FX- X?" Dh' "U" F't OVK!?U" hUAE .'!M th'OLh L!eeFe h?" Keh?Be" UF Q' "UQL!?Se.OX ? A?FFe! t'D?!"Q hUAM he S'OX" F't KOt .eeX "UQt!eQQe" t' Qee hUA ?VVe?! ?XA'Qt K!'PeFhe?!te"W he QtUXX !eAeAKe!e"M UF the AU"Qt '. hUQ H'-M th?t KOt ? .eD h'O!Q h?" eX?VQe" QUFSe he .eXt ?XX the D!etShe"FeQQ '. 'Fe QOVV'Qe" t' Ke LOUXt- '. the.tW CDh?t theFMC he Q?U" t' hUAQeX.M CAOQt Ke the .eeXUFLQ '. hUA Dh' Qt?F"Q S'FBUSte" '. the S!UAeM ?F" the!e.'!e h?Q F't the S'FQSU'OQFeQQ '. UFF'SeFSe t' QOVV'!t hUAN U S?FF't .UF" UF A- he?!t t' OVK!?U" hUAMC he Q?U"M ?Q he t''P Le'!Le ?F" Fe" K- the h?F" ?F" Xe" theA ?S!'QQ the X?DFW
+\end{lstlisting}
+\clearpage
+
+There are a few more words that can be found because of deducing the character
+h. Words like th?t and thUQ and hUQ, so ?,U and Q are replaced by a, i and s.
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+this Das GOite satis.aSt'!- t' heF!- aF" his .!ieF"sE aF" Dith'Ot DaitiFL aF- .O!the! Se!eA'F-M the- sta!te" '.. .'! the sSh''XW iF the AeaF tiAe L!eeFeM haBiFL asSe!taiFe" that the- De!e L'Fe t' his .athe!;s t' AaPe eFGOi!-M ha" S'F.esse" that it Das he Dh' ha" st'XeF the A'Fe- 'Ot '. sS'tt;s K'RE aF" DheF the- !etO!Fe"M he Das sO!!'OF"e" K- aXX the K'-sM Dh' De!e OVK!ai"iFL aF" taOFtiFL hiA Dith his BiXXaF-W his 'DF .!ieF"s t'' De!e aLaiFst hiAE aF"M .!'A shaAe aF" aLitati'F '. AiF"M he X''Pe" A'st D!etShe"X-W it is iAV'ssiKXe t' "esS!iKe the sSeFe DhiSh F'D t''P VXaSe iF the sSh''XY!''AW heF!-M Dh'se AiF" Das !eXieBe" .!'A the "eV!essi'F 'SSasi'Fe" K- this "isL!aSe.OX Sha!LeM Das Sa!esse" aF" S'FL!atOXate" K- eBe!- K'- iF the sSh''XW A!sW ha!!is Pisse" hiA a..eSti'FateX-M aF" sai" she .eXt S'F.i"eFt '. his iFF'SeFSe .!'A the .i!stM aF" ha" FeBe! "esVai!e" '. its KeiFL Aa"e eBi"eFtW HOXiaFa aF" eXi,a De!e aXs' aA'FLst the .i!st t' Kest'D thei! aVV!'Kati'F OV'F his S'F"OStW Le'!Le aF" XittXe Fe" De!e "eXiLhte" Ke-'F" AeasO!e t' see thei! .!ieF" 'FSe A'!e Aa"e haVV-M aF" h'Ve" s''F t' haBe hiA as the Shie. iF thei! -'Oth.OX sV'!tsW KOt it Das .a! "i..e!eFt Dith L!eeFeM Dh' F'D .eXt aXX the D!etShe"Fess '. 'Fe S'FBiSte" '. the.tM aF" "eteSte" iF KaseX- attaShiFL the "isL!aSe.OX Sha!Le t' aF iFF'SeFt aF" V!aiseD'!th- Xa"W he ha" taPeF his seat at the eRt!eAit- '. the sSh''XY!''AM aF" Das hi"iFL his .aSe iF his haF"sE aF" th'OLh a K'- '. D'F"e!.OX sVi!its aF" st!'FL Fe!BeM Das F'D Kathe" iF tea!sM aF" s'KKiFL aX'O"W "!W ha!!isM Dh' ha" KeeF LiBiFL hiA a Be!- seBe!e XeStO!eM stiXX st''" 'Be! hiAM iAV!essiFL OV'F hiA the FeSessit- '. !eti!iFL iFt' his !''AM t' seeP .!'A L'" that .'!LiBeFess iF V!a-e! aF" !eVeFtaFSeM DhiShM he t'' AOSh .ea!e"M D'OX" F't Ke easiX- 'KtaiFe" .!'A his '..eF"e" aF" "isLOste" sSh''XY.eXX'DsW he F'DM the!e.'!eM a!'seM aF" Aa"e his Da- t'Da!"s the "''!M iF "'iFL DhiSh he ha" aLaiF t' eFS'OFte! the eReS!ati'Fs aF" V'iFte" .iFLe!s '. the K'-sM Dh' S!ie"M as he Vasse" theAM CL'M th'O thie. C aF" .'XX'De" hiA OFtiX the- saD hiA eFte! the h'OseW heF!-M h'DeBe!M Das the 'FX- Xa" Dh' "i" F't OVK!ai" hiAE .'!M th'OLh L!eeFe ha" KehaBe" iF s' "isL!aSe.OX a AaFFe! t'Da!"s hiAM he S'OX" F't KOt .eeX "ist!esse" t' see hiA aVVea! aXA'st K!'PeFhea!te"W he stiXX !eAeAKe!e"M iF the Ai"st '. his H'-M that KOt a .eD h'O!s ha" eXaVse" siFSe he .eXt aXX the D!etShe"Fess '. 'Fe sOVV'se" t' Ke LOiXt- '. the.tW CDhat theFMC he sai" t' hiAseX.M CAOst Ke the .eeXiFLs '. hiA Dh' staF"s S'FBiSte" '. the S!iAeM aF" the!e.'!e has F't the S'FsSi'OsFess '. iFF'SeFSe t' sOVV'!t hiAN i SaFF't .iF" iF A- hea!t t' OVK!ai" hiAMC he sai"M as he t''P Le'!Le aF" Fe" K- the haF" aF" Xe" theA aS!'ss the XaDFW
+\end{lstlisting}
+\vspace{20pt}
+\clearpage
+
+From here word by word the solution was found. Character substitutions were
+found by replacing words like GOite, satis.aSt'!-, Das, and Dith'Ot to quite,
+satisfactory, was and without.
+\begin{lstlisting}[
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{8pt}{8.5pt}\selectfont\ttfamily},
+]
+this was quite satisfactory to henry and his friends; and without waiting any further ceremony, they started off for the school. in the mean time greene, having ascertained that they were gone to his father's to make enquiry, had confessed that it was he who had stolen the money out of scott's box; and when they returned, he was surrounded by all the boys, who were upbraiding and taunting him with his villany. his own friends too were against him; and, from shame and agitation of mind, he looked most wretchedly. it is impossible to describe the scene which now took place in the school-room. henry, whose mind was relieved from the depression occasioned by this disgraceful charge, was caressed and congratulated by every boy in the school. mrs. harris kissed him affectionately, and said she felt confident of his innocence from the first, and had never despaired of its being made evident. juliana and eliza were also amongst the first to bestow their approbation upon his conduct. george and little ned were delighted beyond measure to see their friend once more made happy, and hoped soon to have him as the chief in their youthful sports. but it was far different with greene, who now felt all the wretchedness of one convicted of theft, and detected in basely attaching the disgraceful charge to an innocent and praiseworthy lad. he had taken his seat at the extremity of the school-room, and was hiding his face in his hands; and though a boy of wonderful spirits and strong nerve, was now bathed in tears, and sobbing aloud. dr. harris, who had been giving him a very severe lecture, still stood over him, impressing upon him the necessity of retiring into his room, to seek from god that forgiveness in prayer and repentance, which, he too much feared, would not be easily obtained from his offended and disgusted school-fellows. he now, therefore, arose, and made his way towards the door, in doing which he had again to encounter the execrations and pointed fingers of the boys, who cried, as he passed them, "go, thou thief " and followed him until they saw him enter the house. henry, however, was the only lad who did not upbraid him; for, though greene had behaved in so disgraceful a manner towards him, he could not but feel distressed to see him appear almost brokenhearted. he still remembered, in the midst of his joy, that but a few hours had elapsed since he felt all the wretchedness of one supposed to be guilty of theft. "what then," he said to himself, "must be the feelings of him who stands convicted of the crime, and therefore has not the consciousness of innocence to support him? i cannot find in my heart to upbraid him," he said, as he took george and ned by the hand and led them across the lawn. 
+\end{lstlisting}
+\caption[lstlisting]{Plaintext(solution): ``The Friends; Or the Triumph of Innocence Over False Changes: A Tale, Founded on Facts." page 80}
+\vspace{20pt}
+The complete cipher alphabet that was found is:
+\begin{table}[h]
+    \texttt{
+    \begin{tabular}{lc}
+        Plain:  & abcdefghijklmnopqrstuvwxyz '"!?.-;, \\
+        Cipher: & ?ks"i.ltuhpxaf'vg!qzobdr-,j;c nwyem
+    \end{tabular}}
+\end{table}
+\clearpage
+
+\textbf{Vulnerabilities}\\
+The problem with this cipher is that the frequencies of the English language
+have not been obscured, so with frequency analysis and knowledge of the English
+language the text can still be deciphered. There is the difficulty of the
+permutation, but again with the frequency of characters at the beginning and
+the end of a word the right anagram can easily be found.
+
+\section{Poly-Alphabetic cipher}
+This cipher combines the previous Substitution and Permutation ciphers in one.\\
+
+\textbf{Example}\\
+
+\textbf{Problem}\\
+This problem was again provided by Mathias Winther Madsen.
+The cipher is from the Gutenberg library.
+
+\textbf{Vulnerabilities}\\
+
+\chapter{Modern Ciphers}
+
+\bibliography{bib}
+
+\end{document}

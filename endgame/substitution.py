@@ -5,7 +5,6 @@ def main():
 
     with open("ciphers/substitution_cipher.txt", "r") as cipher_file:
         cipher = cipher_file.read()
-    cipher = cipher.lower()
 
     for c in cipher:
         if(c in cipher_dict.keys()):
@@ -24,87 +23,87 @@ def main():
         print(line[0], line[1])
     print()
 
-    # uncipher = '_' * len(cipher)
-    uncipher = cipher
+    uncipher = '_' * len(cipher)
+    # uncipher = cipher
 
     # Space is most occuring in the englsih language so p->' '
-    uncipher = replace(cipher, uncipher, 'p', ' ')
+    uncipher = replace(cipher, uncipher, 'P', ' ')
     # Then comes e so r->e
-    uncipher = replace(cipher, uncipher, 'r', 'e')
+    uncipher = replace(cipher, uncipher, 'R', 'e')
 
     # I see a lot of 19e, so 19 is probably th, the is most occuring Trigram.
     uncipher = replace(cipher, uncipher, '1', 't')
     uncipher = replace(cipher, uncipher, '9', 'h')
 
     # See a Theze, so z->r is likely, fits frequencies
-    uncipher = replace(cipher, uncipher, 'z', 'r')
+    uncipher = replace(cipher, uncipher, 'Z', 'r')
 
     # See thlt, the;r, so l->a, ;->i, fits frequencies
-    uncipher = replace(cipher, uncipher, 'l', 'a')
+    uncipher = replace(cipher, uncipher, 'L', 'a')
     uncipher = replace(cipher, uncipher, ';', 'i')
 
     # See ' 'i:' ', so :->n, fits frequencies
     uncipher = replace(cipher, uncipher, ':', 'n')
 
     # See everfthin-, so f->y, -->g fits frequencies
-    uncipher = replace(cipher, uncipher, 'f', 'y')
+    uncipher = replace(cipher, uncipher, 'F', 'y')
     uncipher = replace(cipher, uncipher, '-', 'g')
-    uncipher = replace(cipher, uncipher, 'v', 'v')
+    uncipher = replace(cipher, uncipher, 'V', 'v')
 
     # See htirring, so h->s fits frequencies
-    uncipher = replace(cipher, uncipher, 'h', 's')
+    uncipher = replace(cipher, uncipher, 'H', 's')
 
     # See g8es 8n, so 8->o fits frequencies
     uncipher = replace(cipher, uncipher, '8', 'o')
 
     # From here on words become pretty clear
     # Fix Raiyoay
-    uncipher = replace(cipher, uncipher, 'o', 'w')
-    uncipher = replace(cipher, uncipher, 'y', 'l')
+    uncipher = replace(cipher, uncipher, 'O', 'w')
+    uncipher = replace(cipher, uncipher, 'Y', 'l')
 
     # Fix sinnessive
-    uncipher = replace(cipher, uncipher, 'n', 'c')
-    uncipher = replace(cipher, uncipher, 'i', 'u')
+    uncipher = replace(cipher, uncipher, 'N', 'c')
+    uncipher = replace(cipher, uncipher, 'I', 'u')
 
     # Fix a terri7le
     uncipher = replace(cipher, uncipher, '7', 'b')
 
     # Fix have acmuirew
-    uncipher = replace(cipher, uncipher, 'm', 'q')
-    uncipher = replace(cipher, uncipher, 'w', 'd')
+    uncipher = replace(cipher, uncipher, 'M', 'q')
+    uncipher = replace(cipher, uncipher, 'W', 'd')
 
     # Fix trans orts
     uncipher = replace(cipher, uncipher, ' ', 'p')
 
     # Fix oe
-    uncipher = replace(cipher, uncipher, 'e', 'f')
+    uncipher = replace(cipher, uncipher, 'E', 'f')
 
     # six = six
-    uncipher = replace(cipher, uncipher, 'x', 'x')
+    uncipher = replace(cipher, uncipher, 'X', 'x')
 
     # accosplishedd
-    uncipher = replace(cipher, uncipher, 's', 'm')
+    uncipher = replace(cipher, uncipher, 'S', 'm')
 
     # citikens
-    uncipher = replace(cipher, uncipher, 'k', 'z')
+    uncipher = replace(cipher, uncipher, 'K', 'z')
 
     # mantind
-    uncipher = replace(cipher, uncipher, 't', 'k')
+    uncipher = replace(cipher, uncipher, 'T', 'k')
 
     # cromwellb
-    uncipher = replace(cipher, uncipher, 'b', ':')
+    uncipher = replace(cipher, uncipher, 'B', ':')
 
     # seed-time
-    uncipher = replace(cipher, uncipher, 'a', '-')
+    uncipher = replace(cipher, uncipher, 'A', '-')
 
-    uncipher = replace(cipher, uncipher, 'c', ',')
-    uncipher = replace(cipher, uncipher, 'd', '.')
-    uncipher = replace(cipher, uncipher, 'q', ';')
+    uncipher = replace(cipher, uncipher, 'C', ',')
+    uncipher = replace(cipher, uncipher, 'D', '.')
+    uncipher = replace(cipher, uncipher, 'Q', ';')
 
     uncipher = replace(cipher, uncipher, ',', '1')
-    uncipher = replace(cipher, uncipher, 'u', '7')
+    uncipher = replace(cipher, uncipher, 'U', '7')
     uncipher = replace(cipher, uncipher, '.', '8')
-    uncipher = replace(cipher, uncipher, 'g', '9')
+    uncipher = replace(cipher, uncipher, 'G', '9')
 
     print("BLACKWOOD'S MAGAZINE, Jan. 1845: ", uncipher)
     # print(cipher)
