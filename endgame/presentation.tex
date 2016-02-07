@@ -5,6 +5,8 @@
 \documentclass{uva-inf-presentation}
 \usepackage[british]{babel}
 \usepackage{listings}
+\usepackage{tikz}
+\usepackage{environ}
 
 \usepackage{caption}
 \DeclareCaptionFont{white}{\color{white}}
@@ -48,17 +50,115 @@
 \section{Introduction in Ciphers}
 %################################################
 % Maak een subsection voor een serie slides met een gedeeld thema
+
+%------------------------------------------------
+\subsection{Communication}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Communication}
+
+%% Document
+\begin{center}
+\resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[]
+        \tikzstyle{every node}=[transform shape];
+
+        % Alice
+        \node (label) at (0,0) {\includegraphics[height=7cm]{canal_alice_dep.pdf}};
+        \node (label) at (0,-4) {\Huge\bf Alice};
+
+        % Bob
+        \node (label) at (30,0) {\includegraphics[height=7cm]{canal_bob_dep.pdf}};
+        \node (label) at (30,-4) {\Huge\bf Bob};
+
+        % Eve
+        \node (label) at (15,-6) {\includegraphics[height=7cm]{canal_eve_dep.pdf}};
+        \node (label) at (15,-10) {\Huge\bf Eve};
+        \draw[->, line width=1mm] (12,-7) -- ++(-3,0) -- node[left] {\Huge\bf Listen} ++(0,+5.5);
+        \draw[->, line width=1mm] (18,-7) -- ++(+3,0) --  node[right] {\Huge\bf Modify} ++(0,+5.5);
+
+        % Canal
+        \draw[line width=1mm] (4,-1) ellipse (0.7 and 1);
+        \draw[line width=1mm] (25,-2) arc (-90:90:1);
+
+        \draw[line width=1mm] (4,0) -- ++(21,0);
+        \draw[line width=1mm] (4,-2) -- ++(21,0);
+        \node (label) at (14.5, 0.5) {\Huge\bf Unsecured canal of communication};
+    \end{tikzpicture}
+}%
+\end{center}
+\end{frame}
+
+%------------------------------------------------
+\subsection{Ciphers}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Ciphers}
+
+\textbf{Cipher:}\\
+Algorithm that maps Input to Output(enciphered text).\\
+Maps back from the enciphered text to the Input. With or without key.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{'Safe' communication}
+
+%% Document
+\begin{center}
+\resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[]
+        \tikzstyle{every node}=[transform shape];
+
+        % Alice
+        \node (label) at (0,0) {\includegraphics[height=7cm]{canal_alice_dep.pdf}};
+        \node (label) at (0,-4) {\Huge\bf Alice};
+
+        \draw[->, line width=1mm] (2,-1) -- (3,-1);
+        \node[rectangle, draw, font=\fontsize{35}{80}\selectfont, minimum height=2cm]  at (5,-1) {Encode};
+        \draw[->, line width=1mm] (7,-1) -- (8,-1);
+
+        % Canal
+        \draw[line width=1mm] (8,-1) ellipse (0.7 and 1);
+        \draw[line width=1mm] (21,-2) arc (-90:90:1);
+        \draw[line width=1mm] (8,0) -- ++(13,0);
+        \draw[line width=1mm] (8,-2) -- ++(13,0);
+        \node (label) at (14.5, 0.5) {\Huge\bf Canal of communication};
+        % \Canal
+
+        % Bob
+        \node (label) at (30,0) {\includegraphics[height=7cm]{canal_bob_dep.pdf}};
+        \node (label) at (30,-4) {\Huge\bf Bob};
+
+        \draw[->, line width=1mm] (21.5,-1) -- (22.5,-1);
+        \node[rectangle, draw, font=\fontsize{35}{80}\selectfont, minimum height=2cm]  at (24.5,-1) {Decode};
+        \draw[->, line width=1mm] (26.5,-1) -> (28,-1);
+
+        % Eve
+        \node (label) at (15,-6) {\includegraphics[height=7cm]{canal_eve_dep.pdf}};
+        \node (label) at (15,-10) {\Huge\bf Eve};
+        \draw[->, line width=1mm] (12,-7.5) -- ++(-2,0) -- node[left] {\Huge\bf Listen} ++(0,+5.5);
+        \draw[->, line width=1mm] (18,-7.5) -- ++(+2,0) --  node[right] {\Huge\bf Modify} ++(0,+5.5);
+
+    \end{tikzpicture}
+}%
+\end{center}
+\end{frame}
+
 %------------------------------------------------
 \subsection{Traditional Ciphers}
 %------------------------------------------------
 
 \begin{frame}
 \frametitle{Traditional Ciphers}
+\textbf{History:}
 \begin{itemize}
     \item Origin lies in ancient Egypt $\sim4000$ years ago. %mostly army/government
     \item Ends after second world war with the emergence of the computers.
 \end{itemize}
-Uses
+\textbf{Uses}:
 \begin{itemize}
     \item War movement.
     \item Government Secrets.
@@ -84,7 +184,7 @@ Uses
 \begin{frame}
 \frametitle{Substitution Cipher:\\ Example}
 A Caesar Cipher is a Substitution Cipher that shifts a regular alphabet.
-Here a Caesar Cipher with a left shift of 3:\\
+Here a Caesar Cipher with a right shift of 3:\\
 \begin{table}
     \begin{tabular}{lc}
         Plain:  & ABCDEFGHIJKLMNOPQRSTUVWXYZ\\
@@ -545,7 +645,279 @@ Giovan Bellaso $\sim 1553$
 \end{frame}
 
 \begin{frame}
+\frametitle{Periodic Polyalphabetic Cipher:\\ Problem}
+\begin{minipage}{\linewidth}
+\centering
+{\fontsize{3.5pt}{4.5pt}\selectfont
+\begin{tabular}{ll}\toprule
+Character & Frequency in \%     \\
+\midrule
+F & 6.627456605938891  \\
+L & 6.039305695022235  \\
+I & 5.666331946636063  \\
+Z & 5.035145603213312  \\
+E & 4.705207287333238  \\
+R & 4.67651699899584   \\
+T & 4.045330655573089  \\
+' & 3.959259790560895  \\
+C & 3.9162243580547984 \\
+X & 3.815808348873906  \\
+G & 3.686702051355616  \\
+J & 3.6723569071869173 \\
+; & 3.6723569071869173 \\
+P & 3.069860852101564  \\
+A & 2.8116482570649834 \\
+D & 2.7973031128962846 \\
+- & 2.7973031128962846 \\
+U & 2.739922536221489  \\
+H & 2.5534356620284036 \\
+V & 2.4817099411849086 \\
+. & 2.438674508678812  \\
+S & 2.409984220341414  \\
+K & 2.3669487878353177 \\
+, & 2.323913355329221  \\
+B & 2.194807057810931  \\
+Y & 1.6783818677377709 \\
+N & 1.6210012910629752 \\
+Q & 1.5779658585568785 \\
+  & 1.4058241285324917 \\
+W & 1.3771338401950939 \\
+M & 0.9898149476402237 \\
+O & 0.8463635059532348 \\ \bottomrule
+\end{tabular}}
+\end{minipage}%
+\end{frame}
+
+\begin{frame}[containsverbatim]
 \frametitle{Periodic Polyalphabetic Cipher:\\ Solution}
+\begin{lstlisting}
+    qbry = []
+    skol = []
+    for i in range(0, len(cipher)):
+        if(cipher[i:i + 4] == 'QBRY'):
+            qbry.append(i)
+        elif(cipher[i:i + 4] == 'SKOL'):
+            skol.append(i)
+    print(qbry)
+    print(skol)
+
+    [0, 585, 5550]
+    [45, 1060, 1790, 2155, 2250, 3295, 3760, 4490, 4940, 6010]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[containsverbatim]
+\frametitle{Periodic Polyalphabetic Cipher:\\ Solution}
+
+\begin{minipage}{0.2\linewidth}
+\centering
+{\fontsize{3.5pt}{4.5pt}\selectfont
+\begin{tabular}{ll}\toprule
+Character & Frequency in \%     \\
+\midrule
+F & 16.91 \\
+U & 9.318 \\
+Z & 7.383 \\
+R & 6.810 \\
+S & 5.878 \\
+H & 5.806 \\
+C & 5.734 \\
+D & 5.591 \\
+X & 5.017 \\
+G & 4.946 \\
+; & 3.655 \\
+, & 2.795 \\
+I & 2.652 \\
+P & 2.365 \\
+M & 2.150 \\
+V & 1.863 \\
+Q & 1.792 \\
+O & 1.648 \\
+. & 1.505 \\
+A & 1.505 \\
+  & 1.362 \\
+Y & 1.003 \\
+L & 0.860 \\
+W & 0.501 \\
+T & 0.215 \\
+B & 0.215 \\
+N & 0.143 \\
+' & 0.143 \\
+- & 0.071 \\
+K & 0.071 \\
+J & 0.071 \\ \bottomrule
+\end{tabular}}
+\end{minipage}%
+\begin{minipage}{0.2\linewidth}
+\centering
+{\fontsize{3.5pt}{4.5pt}\selectfont
+\begin{tabular}{ll}\toprule
+Character & Frequency in \%     \\
+\midrule
+E & 18.72 \\
+A & 9.253 \\
+T & 7.819 \\
+B & 6.671 \\
+K & 6.384 \\
+X & 5.523 \\
+N & 5.236 \\
+V & 5.021 \\
+. & 4.878 \\
+G & 4.878 \\
+; & 3.730 \\
+R & 3.228 \\
+S & 2.654 \\
+D & 2.008 \\
+J & 1.936 \\
+F & 1.793 \\
+U & 1.721 \\
+L & 1.578 \\
+W & 1.506 \\
+H & 1.291 \\
+C & 1.147 \\
+' & 1.147 \\
+Y & 0.573 \\
+Q & 0.573 \\
+I & 0.215 \\
+M & 0.215 \\
+  & 0.143 \\
+- & 0.071 \\
+, & 0.071 \\
+  &       \\ 
+  &       \\ \bottomrule
+\end{tabular}}
+\end{minipage}%
+\begin{minipage}{0.2\linewidth}
+\centering
+{\fontsize{3.5pt}{4.5pt}\selectfont
+\begin{tabular}{ll}\toprule
+Character & Frequency in \%     \\
+\midrule
+J & 15.13 \\
+F & 9.397 \\
+Z & 7.604 \\
+R & 7.317 \\
+C & 7.173 \\
+I & 6.097 \\
+; & 5.380 \\
+L & 5.236 \\
+' & 5.021 \\
+- & 4.304 \\
+K & 4.088 \\
+Q & 2.725 \\
+E & 2.654 \\
+, & 2.367 \\
+O & 2.008 \\
+G & 2.008 \\
+H & 1.865 \\
+S & 1.578 \\
+V & 1.578 \\
+M & 1.219 \\
+Y & 1.219 \\
+U & 1.004 \\
+N & 0.932 \\
+T & 0.860 \\
+  & 0.286 \\
+W & 0.286 \\
+P & 0.215 \\
+B & 0.143 \\
+. & 0.143 \\
+D & 0.071 \\
+A & 0.071 \\ \bottomrule
+\end{tabular}}
+\end{minipage}%
+\begin{minipage}{0.2\linewidth}
+\centering
+{\fontsize{3.5pt}{4.5pt}\selectfont
+\begin{tabular}{ll}\toprule
+Character & Frequency in \%     \\
+\midrule
+L & 18.00 \\
+P & 10.32 \\
+T & 6.456 \\
+, & 6.384 \\
+D & 6.312 \\
+' & 5.882 \\
+Y & 5.523 \\
+. & 5.523 \\
+F & 4.949 \\
+Z & 4.734 \\
+B & 3.515 \\
+X & 2.797 \\
+I & 2.654 \\
+H & 2.439 \\
+W & 2.439 \\
+R & 2.152 \\
+V & 1.793 \\
+N & 1.721 \\
+A & 1.578 \\
+  & 1.362 \\
+Q & 0.789 \\
+K & 0.645 \\
+J & 0.573 \\
+O & 0.502 \\
+E & 0.430 \\
+S & 0.215 \\
+U & 0.143 \\
+M & 0.071 \\
+G & 0.071 \\
+  &       \\ 
+  &       \\ \bottomrule
+\end{tabular}}
+\end{minipage}%
+\begin{minipage}{0.2\linewidth}
+\centering
+{\fontsize{3.5pt}{4.5pt}\selectfont
+\begin{tabular}{ll}\toprule
+Character & Frequency in \%     \\
+\midrule
+I & 16.71 \\
+- & 9.540 \\
+' & 7.604 \\
+G & 6.527 \\
+X & 5.738 \\
+; & 5.595 \\
+C & 5.523 \\
+Z & 5.451 \\
+T & 4.878 \\
+L & 4.519 \\
+R & 3.873 \\
+  & 3.873 \\
+P & 2.439 \\
+V & 2.152 \\
+W & 2.152 \\
+Q & 2.008 \\
+S & 1.721 \\
+E & 1.721 \\
+A & 1.649 \\
+U & 1.506 \\
+H & 1.362 \\
+M & 1.291 \\
+J & 0.645 \\
+K & 0.645 \\
+B & 0.430 \\
+. & 0.143 \\
+O & 0.071 \\
+F & 0.071 \\
+Y & 0.071 \\
+N & 0.071 \\
+  &       \\ \bottomrule
+\end{tabular}}
+\end{minipage}%
+\end{frame}
+
+\begin{frame}[containsverbatim]
+\frametitle{Periodic Polyalphabetic Cipher:\\ Solution}
+\vspace{-20pt}
+\begin{lstlisting}[
+    backgroundcolor=\color{lightgray},
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{3.2pt}{3.7pt}\selectfont},
+    caption=Periodic Poly-Alphabetic Cipher(like Enigma) provided by Mathias,
+]
+within henry's mind the expedient of dispatching the  oung knight as bearer of his own death warrant had been conceived in a spirit of absurd bravado. so far as his calculating and selfish character permitted, he was fond of him. but if he suffered a regret, it was who ly personal, and because of circumstances that had compelled him to part from one in whose companionship he had derived a great deal of pleasure. in respect of any feeling of genuine sorrow, the entire scene enacted between himse f and stanley had been a comp ete farce. though he had invested that doughty warrior with man  and distinguished honors and great power, he had never entertained on the behalf of his chief official that feeling of confidence so essential to the comp aisance of mind of any ruler. it was his intention to set before that individua  an examp e of integrit  and devotion that the king fancied would be well worthy of emulation. as an additional safeguard, however, he caused secret spies of his own selection to be dispatched in the train of sir richard. in adopting this course he believed himself to be keeping the situation well in hand; at once guarding against any interruption of the final delivery of the unusual warrant, and providing him with the means of testing lord stan ey's devotion to his cause. thus, had not sir richard taken it into his head to follow an itinerar  entirely different from either the one suggested by henry, or that secretly transmitted to him beside the portcullis b  lord stan ey, some state prob ems of vast magniture and importance might then have been solved. as it subsequentl  transpired, al  along and between the roads that it was definite y supposed the young knight and his squire would make their pilgrimage, king's emissaries were constantly meeting and receiving entertainment of stan ey's lieutenants, as wel  as the other way about. obviousl , neither the one side nor the other dared to hint of its purpose of espionage or destination; nor  et dared to display any undue haste in parting to pursue its secret way. it also became necessary for them to observe every possib e precaution in the matter of covering up their trails, one from another; and, in this way, the innocent cause of this rather amusing game of cross-purposes was permitted to go unmolested upon his way. the route that sir richard had chosen rendered it necessary for himself and squire to tread paths and by-ways used chiefl  by peasant farmers and sheep-herders. at times, after a heavy fa l of rain, such of these as wound through the low lying val eys would become wholly impassable, making it needful for our pi grims to await the draining of the flood into the rivers, or to make  ong detours to come upon the other side. for this reason, it had reached well a ong into october before they had passed through the liberties of berwick and set foot upon scottish soil. it was growing late in the afternoon of their second day in scotland, and while they were skirting the edge of a rock-tarn  ying in g oom  seclusion in the middle of a desolate moor, that sir richard was murderous y deprived of the services of his squire and brave attendant. there had been no hint of the approach of the tragedy; no clue as to the identity or purpose of the cowardly perpetrators following its occurrence. mounted upon his mettlesome charger, which, though uncommon y powerfu , was somewhat fatigued because of the many miles put behind him that day, the young knight was riding s owl  along some two hundred  ards in advance of belwiggar. the sky was heavy, gray, and lowering; and the bou der-strewn, monotonousl  leve  expanse of moor affording no pleasant aspect or interesting contrasts to the eye, sir richard's gaze remained fixed upon the nodding head of his sta lion. so near the brink was the narrow path winding along the waters of the tarn, and so unruffled was its surface, that steed and armored rider were mirrored faithfull , point for point, beneath. hearing a sharp rattling of stee -shod hoofs behind him, and vaguely marveling as to the cause of this unexpected and unusual burst of energy upon the part of his squire, the young knight turned, with a smile upon his face, to greet belwiggar's approach. to his horrified surprise he was but just in time to see the honest fellow writhing in an agony of death, while the horse that he had so  ately bestrode in the prime vigor of rugged health whisked blind y ahead of the young knight a ong the road, till, crashing against a huge boulder upreared within its path, it stumbled, seemed to hang for an instant in mid-air, and then, neighing with wi d affright, disappeared with a tremendous sp ash beneath the surface of the tarn. apprehending some immediate danger to himself, sir richard, upon the instant, drew his visor close. just as he had accomplished this move a bo t struck fair upon the joint of his neck-guard; and, though it did him no harm beyond causing his head to ring with the force of the impact, it was the cunning of his armorer alone that had saved him from a death similar to that of be wiggar. having no means of knowing the exact direction from whence the arrows had been sped, and the nature of the ground precluding the possibi ity of sending his horse over it, the  oung knight made no attempt to seek out and punish his assai ant. he shot a glance of the keenest scrutiny from bou der to boulder, but there was no sign of a living being upon the moor. satisfied that belwiggar's death must go unavenged for the time, he rode back to where he la  with a feathered shaft, still quivering, protruding from his broad breast. he dismounted beside the bod , tethering his horse in the hollow between two rocky promontories through which the path swung. he stood looking around him for a space, uncertain what to do. so overwhe ming y appalling and strange were the circumstances attending the tragedy, and to that degree was sir richard oppressed by his me ancholy surroundings, that he became fi led with a fee ing of unspeakable dread, an almost uncontro lable desire to throw himself upon the back of his steed and gal op swiftly away. torn b  such emotions, it was no light task to remain upon the scene for the purpose of making such disposition of poor be wiggar's body as his limited means would permit. by employing the dead warrior's battle-ax in  ieu of mattock, however, he contrived to hol ow out a sufficient space to  ay him decently away. then, piling up a mound of  oose stones above the shallow grave, sir richard remounted and pursued his solitary way northward toward bannockburn and castle  ewe. as he journeyed onward the young knight made many determined efforts to whistle and sing away a feeling of deep melancho y that persisted in setting somber y down upon him. in the manner of a gloomy procession passing in review before his mind's eye, he recalled al  of the wild folklore with which his ears had been beguiled since his advent into scotland
+\end{lstlisting}
 \end{frame}
 
 \subsection{Running Key Cipher}
@@ -553,19 +925,31 @@ Giovan Bellaso $\sim 1553$
 
 \begin{frame}
 \frametitle{Running Key Cipher:\\ Example}
+
+\textbf{Plaintext:}\\
+f   l   e   e   a   t   o   n   c   e   w   e   a   r   e   d   i   s   c   o   v   e   r   e   d\\
+\textbf{Running key:}\\
+E   R   R   O   R   S   C   A   N   O   C   C   U   R   I   N   S   E   V   E   R   A   L   P   L\\
+\textbf{Ciphertext:}\\
+J   C   V   S   R   L   Q   N   P   S   Y   G   U   I   M   Q   A   W   X   S   M   E   C   T   O\\
 \end{frame}
 
 \begin{frame}
 \frametitle{Running Key Cipher:\\ Problem}
-\end{frame}
-
-\begin{frame}
-\frametitle{Running Key Cipher:\\ Solution}
+\vspace{-30pt}
+\lstinputlisting[
+    backgroundcolor=\color{lightgray},
+    breakindent=0.5pt,
+    breaklines,
+    basicstyle={\fontsize{2.6pt}{2.9pt}\selectfont},
+    caption=Running Key Cipher provided by Mathias,
+]{ciphers/running_key_cipher.txt}
 \end{frame}
 
 %------------------------------------------------
 %################################################
 \section{Modern Ciphers}
+\frame{\tableofcontents[currentsection]}
 %------------------------------------------------
 \begin{frame}
 \frametitle{Modern Ciphers}
@@ -582,18 +966,22 @@ Ciphers can be distinguished into two types by the type of input data:
     \item Stream ciphers, which encrypt continuous streams of data
 \end{itemize}
 \end{frame}
+
+\begin{frame}
+\frametitle{AES}
+\includegraphics[width=\linewidth]{aes}
+\end{frame}
 %################################################
 %------------------------------------------------
-\begin{frame}
-\frametitle{Stelling}
-\begin{theorem}[Massa-energierelatie]
-$E = mc^2$
-\end{theorem}
-\end{frame}
+\section{End}
 %------------------------------------------------
 \begin{frame}
-\frametitle{Conclusie}
-\Large{\centerline{Belangrijkste conclusie}}
+\frametitle{Conclusion}
+\Large{\centerline{Conclusion}}
+\end{frame}
+
+\begin{frame}
+\Large{\centerline{Questions?}}
 \end{frame}
 %------------------------------------------------
 %################################################

@@ -1,6 +1,10 @@
+from itertools import chain
+import string
+
 def main():
     cipher = ""
-
+    cipher_dict = {}
+    cipher_frequency = {}
     with open("ciphers/polyalphabetic_cipher.txt", "r") as cipher_file:
         cipher = cipher_file.read()
 
@@ -13,6 +17,23 @@ def main():
             skol.append(i)
     print(qbry)
     print(skol)
+
+    for c in cipher:
+        if(c in cipher_dict.keys()):
+            cipher_dict[c] += 1
+        else:
+            cipher_dict[c] = 1
+
+    for c in cipher_dict:
+        cipher_frequency[c] = (cipher_dict[c] / float(len(cipher))) * 100
+
+    print("Number of different chars: ", len(cipher_dict))
+    print("Frequencies of chars in Cipher: ")
+
+    for line in sorted(cipher_frequency.items(), key=lambda x: x[1],
+                       reverse=True):
+        print(line[0], line[1])
+    print()
 
     # Wolfram GCD, means alphabet repeats every 5 characters
     gcd = 5
@@ -36,24 +57,40 @@ def main():
                                       float(len(cipher[i::gcd]))) * 100
 
     for i in range(0, gcd):
-        print("Frequencies of chars in Cipher[" + str(i) + "::5]")
+        print("Frequencies of chars in Cipher[" + str(i) + "::"+ str(gcd) + "]")
         for line in sorted(cipher_frequency[i].items(), key=lambda x: x[1],
                            reverse=True):
             print(line[0], line[1])
         print()
 
-    # uncipher = '_' * len(cipher)
-    # uncipher = cipher
-    print(cipher)
+    alphabet1 = '\'JKYLF' + 'Z M;UIPXS-T,OGDANCHRVWQB.*'
+    alphabet2 = ', IHME'  + 'NCW;AFD.B*YRUKXL-GVTSQ\'*J*'
+    alphabet3 = 'P BNWJ'  + 'CYVKF,OL;ATEHIZS.-\'RQUGDM*'
+    alphabet4 = 'SM*JOL'  + ',QWBPVHYDGEINT\'R*ZF.XKAU_*'
+    alphabet5 = '*.*MKI'  + 'ZUER-PVLXYB_W;GSFCT\'AJQOHN'
+
+    cipher_alphabet = [alphabet1, alphabet2, alphabet3, alphabet4, alphabet5]
+
+    shift = []
+    for i, bet in enumerate(cipher_alphabet):
+        shift.append(shift_alphabet(cipher[i::gcd], bet))
+
+    print("".join(list(chain(*zip(*(shift))))))
 
 
-def replace(string, otherstring, orig, new):
-    char_indices = [i for i, c in enumerate(list(string)) if c == orig]
-    for i in char_indices:
-        otherstring = list(otherstring)
-        otherstring[i] = new
-        otherstring = "".join(otherstring)
-    return otherstring
+def shift_alphabet(text, new_alphabet):
+    full_alphabet = list('-\';,. ' + string.ascii_lowercase)
+    new_alphabet = list(new_alphabet)
+
+    text = list(text)
+    new_text = list(text)
+
+    for i, c in enumerate(new_alphabet):
+        for j, c2 in enumerate(text):
+            if(c2 == c):
+                new_text[j] = full_alphabet[i]
+
+    return new_text
 
 
 if __name__ == '__main__':
